@@ -1,6 +1,9 @@
 
 module Utilitarios(
+    mostrarMensaje,
     verificarEnteroValido,
+    verificarFlotanteValido,
+    verificarNumeroPositivo,
     limpiarConsola,
     pausarConsola,
 ) where
@@ -18,6 +21,15 @@ import System.Info
 import System.Process
 import Text.Read
 
+{-
+    Función: mostrarMensaje
+    Descripción: Muestra un mensaje en la consola.
+    Parámetros:
+        - titulo: Título del mensaje.
+        - mensaje: Mensaje a mostrar.
+        - tipo: Símbolo del mensaje. (!!, ??, **, etc...)
+    Retorno: Ninguno.
+-}
 mostrarMensaje :: String -> String -> String -> IO ()
 mostrarMensaje titulo mensaje tipo = do
     putStrLn "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
@@ -25,15 +37,46 @@ mostrarMensaje titulo mensaje tipo = do
     putStrLn $ mensaje
     putStrLn "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 
--- https://stackoverflow.com/questions/49367072/haskell-validate-integer-input-from-string-using-readmaybe
+{-
+    Función: verificarEnteroValido
+    Descripción: Verifica si un String es un entero válido.
+    Parámetros:
+        - String: El String a verificar.
+    Retorno:
+        - Bool: True si el String es un entero válido, False en caso contrario.
+    Source: https://stackoverflow.com/questions/49367072/haskell-validate-integer-input-from-string-using-readmaybe
+-}
 verificarEnteroValido :: String -> Bool
 verificarEnteroValido strEntero
     | (readMaybe strEntero :: Maybe Int) == Nothing = False
     | otherwise = True
 
+{-
+    Función: verificarFlotanteValido
+    Descripción: Verifica si un String es un flotante (double) válido.
+    Parámetros:
+        - String: El String a verificar.
+    Retorno:
+        - Bool: True si el String es un flotante (double) válido, False en caso contrario.
+    Source: https://stackoverflow.com/questions/49367072/haskell-validate-integer-input-from-string-using-readmaybe
+-}
 verificarFlotanteValido :: String -> Bool
 verificarFlotanteValido strFlotante
-    | (readMaybe strFlotante :: Maybe Float) == Nothing = False
+    | (readMaybe strFlotante :: Maybe Double) == Nothing = False
+    | otherwise = True
+
+{-
+    Función: verificarNumeroNegativo
+    Descripción: Verifica si un String es un número double positivo.
+    Parámetros:
+        - String: El String a verificar.
+    Retorno:
+        - Bool: True si el String es un número double positivo, False en caso contrario.
+-}
+verificarNumeroPositivo :: String -> Bool
+verificarNumeroPositivo strNumero
+    | ((readMaybe strNumero :: Maybe Double) == Nothing) = False
+    | (read strNumero :: Double) < 0 = False
     | otherwise = True
 
 {-
