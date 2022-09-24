@@ -18,6 +18,7 @@ import qualified Data.ByteString.Lazy as BS
 -- Importaciones locales
 import Comercio
 import Bicicleta
+import Parqueo
 import qualified Utilitarios as UT
 
 editarDatosComercio :: IO ()
@@ -113,7 +114,7 @@ mostrarMenuOperativo = do
     putStrLn "3. Cargar y mostrar parqueos"
     putStrLn "4. Cargar y mostrar bicicletas"
     putStrLn "0. Volver al menú principal"
-    putStr "Digite la opcion deseada: \n>>"
+    putStr "Digite la opcion deseada: \n>"
     opcion <- getLine
 
     if (UT.verificarEnteroValido opcion) then do
@@ -130,7 +131,10 @@ mostrarMenuOperativo = do
                 mostrarMenuOperativo
             3 -> do
                 UT.limpiarConsola
-                putStrLn "Mostrar parqueos... (Alex)"
+                putStrLn "\n============ [INFORMACION DE LOS PARQUEOS] ============"
+                putStr "Ingrese la ubicacion del archivo: "
+                direccion <- getLine
+                Parqueo.mostrarParqueos direccion                
                 UT.pausarConsola
                 mostrarMenuOperativo
             4 -> do
@@ -164,7 +168,7 @@ mostrarMenuPrincipal = do
     putStrLn "1. Opciones operativas"
     putStrLn "2. Opciones generales"
     putStrLn "0. Sair"
-    putStr "Digite la opcion deseada: \n>>"
+    putStr "Digite la opcion deseada: \n>"
     opcion <- getLine
 
     if (UT.verificarEnteroValido opcion) then do
