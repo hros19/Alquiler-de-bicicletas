@@ -29,6 +29,7 @@ library
       Utilitarios
       Bicicleta
       Comercio
+      Parqueo
   other-modules:
       Paths_programa
   hs-source-dirs:
