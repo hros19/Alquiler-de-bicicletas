@@ -10,7 +10,7 @@ description:    Please see the README on GitHub at <https://github.com/hros19/Al
 homepage:       https://github.com/hros19/Alquiler-de-bicicletas#readme
 bug-reports:    https://github.com/hros19/Alquiler-de-bicicletas/issues
 author:         Hansol Antay Rostrán & Alexander Sánchez Céspedes
-maintainer:     example@example.com
+maintainer:     rostrhan@outlook.com
 copyright:      2022 hros19-ALEXUSCR27
 license:        BSD3
 license-file:   LICENSE
@@ -27,6 +27,7 @@ library
   exposed-modules:
       Utilitarios
       Utilitarios
+      Bicicleta
       Comercio
   other-modules:
       Paths_programa
