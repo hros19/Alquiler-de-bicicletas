@@ -17,23 +17,130 @@ import qualified Data.ByteString.Lazy as BS
 
 -- Importaciones locales
 import Comercio
+import Bicicleta
 import qualified Utilitarios as UT
+
+editarDatosComercio :: IO ()
+editarDatosComercio = do
+    UT.limpiarConsola
+    putStrLn "============ [INFORMACION ACTUAL DEL COMERCIO] ============"
+    Comercio.mostrarComercio
+    putStrLn "==========================================================="
+    putStrLn "NOTA: Si desea cancelar, presione (enter) en cualquier momento.\n"
+    putStrLn "Ingrese el nuevo nombre del comercio: "
+    nombre <- getLine
+    if (nombre == "") then do
+        UT.limpiarConsola
+        let msj = "No se ha realizado ningún cambio."
+        UT.mostrarMensaje "Info" msj "**"
+        UT.pausarConsola
+        return ()
+    else do
+    
+    putStrLn "Ingrese la nueva dirección web: "
+    web <- getLine
+    if (web == "") then do
+        UT.limpiarConsola
+        let msj = "No se ha realizado ningún cambio."
+        UT.mostrarMensaje "Info" msj "**"
+        UT.pausarConsola
+        return ()
+    else do
+    
+    putStrLn "Ingrese la nueva info. de contacto: "
+    contacto <- getLine
+    if (contacto == "") then do
+        UT.limpiarConsola
+        let msj = "No se ha realizado ningún cambio."
+        UT.mostrarMensaje "Info" msj "**"
+        UT.pausarConsola
+        return ()
+    else do
+
+    -- Tarifas (numérico / double)
+    putStrLn "Ingrese la nueva tarifa por km pedal: "
+    tarifaKmPedal <- getLine
+    if (tarifaKmPedal == "") then do
+        UT.limpiarConsola
+        let msj = "No se ha realizado ningún cambio."
+        UT.mostrarMensaje "Info" msj "**"
+        UT.pausarConsola
+        return ()
+    else do
+
+    putStrLn "Ingrese la nueva tarifa por km eléctrico: "
+    tarifaKmElectrico <- getLine
+    if (tarifaKmElectrico == "") then do
+        UT.limpiarConsola
+        let msj = "No se ha realizado ningún cambio."
+        UT.mostrarMensaje "Info" msj "**"
+        UT.pausarConsola
+        return ()
+    else do
+
+    if (UT.verificarNumeroPositivo tarifaKmPedal == False) then do
+        UT.limpiarConsola
+        let msj = "Debe digitar un número flotante positivo para el valor " ++
+                  "de la tarifa por km pedal.\n" ++
+                  "Digitó: `" ++ tarifaKmPedal ++ "`\n"
+        UT.mostrarMensaje "Error" msj "!!"
+        UT.pausarConsola
+        editarDatosComercio
+    else if (UT.verificarNumeroPositivo tarifaKmElectrico == False) then do
+        UT.limpiarConsola
+        let msj = "Debe digitar un número flotante positivo para el valor " ++
+                  "de la tarifa por km eléctrico.\n" ++
+                  "Digitó: `" ++ tarifaKmElectrico ++ "`\n"
+        UT.mostrarMensaje "Error" msj "!!"
+        UT.pausarConsola
+        editarDatosComercio
+    else do
+        let tarifaKmPedal' = read tarifaKmPedal :: Double
+        let tarifaKmElectrico' = read tarifaKmElectrico :: Double
+        let comercio = Comercio nombre web contacto tarifaKmPedal' tarifaKmElectrico'
+        UT.limpiarConsola
+        let msj = "Los datos del comercio han sido actualizados."
+        UT.mostrarMensaje "Info" msj "**"
+        UT.pausarConsola
+        Comercio.guardarComercio comercio
+        return ()
 
 mostrarMenuOperativo :: IO ()
 mostrarMenuOperativo = do
     putStrLn "============ [MENU OPERATIVO] ============"
     putStrLn "1. Mostrar información del comercio"
     putStrLn "2. Editar información del comercio"
-    putStrLn "[>>] Digite la opcion deseada:"
+    putStrLn "3. Cargar y mostrar parqueos"
+    putStrLn "4. Cargar y mostrar bicicletas"
+    putStrLn "0. Volver al menú principal"
+    putStr "Digite la opcion deseada: \n>>"
     opcion <- getLine
 
     if (UT.verificarEnteroValido opcion) then do
         case (read opcion :: Int) of
             1 -> do
                 UT.limpiarConsola
+                putStrLn "============ [INFORMACION DEL COMERCIO] ============"
+                Comercio.mostrarComercio
+                putStrLn "===================================================="
+                UT.pausarConsola
                 mostrarMenuOperativo
-            2 -> putStrLn "...."
-            3 -> putStrLn "Saliendo..."
+            2 -> do
+                editarDatosComercio
+                mostrarMenuOperativo
+            3 -> do
+                UT.limpiarConsola
+                putStrLn "Mostrar parqueos... (Alex)"
+                UT.pausarConsola
+                mostrarMenuOperativo
+            4 -> do
+                UT.limpiarConsola
+                putStrLn "============ [BICICLETAS] ============"
+                Bicicleta.mostrarBicicletas
+                putStrLn "======================================"
+                UT.pausarConsola
+                mostrarMenuOperativo
+            0 -> putStrLn "Saliendo..."
             _ -> do
                 UT.limpiarConsola
                 let msj = "Debe digitar una opcion valida." ++
@@ -56,8 +163,8 @@ mostrarMenuPrincipal = do
     putStrLn "============ [MENU PRINCIPAL] ============"
     putStrLn "1. Opciones operativas"
     putStrLn "2. Opciones generales"
-    putStrLn "3. Sair"
-    putStrLn "[>>] Digite la opcion deseada:"
+    putStrLn "0. Sair"
+    putStr "Digite la opcion deseada: \n>>"
     opcion <- getLine
 
     if (UT.verificarEnteroValido opcion) then do
