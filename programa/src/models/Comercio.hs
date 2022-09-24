@@ -14,7 +14,7 @@ path_comercio = "./src/data/comercio.json"
 
 {--------------------------------------------------------------------------------------------------
 Modelo: Comercio
-Versión: 1.0 (22 de noviembre del 2022)
+Versión: 1.0 (24 de setiembre del 2022)
 Autor: Hansol Antay Rostrán (https://github.com/hros19)
 ---------------------------------------------------------------------------------------------------
 Descripción y propósito: 
