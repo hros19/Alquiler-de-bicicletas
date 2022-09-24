@@ -1,0 +1,67 @@
+name:                programa
+version:             0.1.0.0
+github:              "hros19/Alquiler-de-bicicletas"
+license:             BSD3
+author:              "Hansol Antay Rostrán & Alexander Sánchez Céspedes"
+maintainer:          "rostrhan@outlook.com"
+copyright:           "2022 hros19-ALEXUSCR27"
+
+extra-source-files:
+- README.md
+- CHANGELOG.md
+
+# Metadata used when publishing your package
+# synopsis:            CLI-Application for data administration using JSON files.
+# category:            CLI-App.
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/hros19/Alquiler-de-bicicletas#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- aeson
+- aeson-pretty
+- bytestring
+- process
+
+ghc-options:
+- -Wall
+- -Wcompat
+- -Widentities
+- -Wincomplete-record-updates
+- -Wincomplete-uni-patterns
+- -Wmissing-export-lists
+- -Wmissing-home-modules
+- -Wpartial-fields
+- -Wredundant-constraints
+
+library:
+  source-dirs:
+    - src
+    - src/
+    - src/models
+    - src/data
+
+executables:
+  programa-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - programa
+
+tests:
+  programa-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - programa

@@ -1,0 +1,78 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.35.0.
+--
+-- see: https://github.com/sol/hpack
+
+name:           programa
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/hros19/Alquiler-de-bicicletas#readme>
+homepage:       https://github.com/hros19/Alquiler-de-bicicletas#readme
+bug-reports:    https://github.com/hros19/Alquiler-de-bicicletas/issues
+author:         Hansol Antay Rostrán & Alexander Sánchez Céspedes
+maintainer:     example@example.com
+copyright:      2022 hros19-ALEXUSCR27
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    CHANGELOG.md
+
+source-repository head
+  type: git
+  location: https://github.com/hros19/Alquiler-de-bicicletas
+
+library
+  exposed-modules:
+      Utilitarios
+      Utilitarios
+      Comercio
+  other-modules:
+      Paths_programa
+  hs-source-dirs:
+      src
+      src/
+      src/models
+      src/data
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
+  build-depends:
+      aeson
+    , aeson-pretty
+    , base >=4.7 && <5
+    , bytestring
+    , process
+  default-language: Haskell2010
+
+executable programa-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_programa
+  hs-source-dirs:
+      app
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      aeson
+    , aeson-pretty
+    , base >=4.7 && <5
+    , bytestring
+    , process
+    , programa
+  default-language: Haskell2010
+
+test-suite programa-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_programa
+  hs-source-dirs:
+      test
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      aeson
+    , aeson-pretty
+    , base >=4.7 && <5
+    , bytestring
+    , process
+    , programa
+  default-language: Haskell2010
