@@ -44,6 +44,15 @@ obtenerParqueos path = do
         Just parqueos -> return parqueos
         Nothing -> return []
 
+existeParqueo :: String -> String -> IO Bool
+existeParqueo path nombre = do
+    parqueos <- obtenerParqueos path
+    return (existeParqueo' parqueos nombre :: Bool)
+
+existeParqueo' :: [Parqueo] -> String -> Bool
+existeParqueo' [] nombre = False
+existeParqueo' (x:xs) nombre = if (Parqueo.nombre x) == nombre then True else existeParqueo' xs nombre
+
 
 mostrarParqueo :: Parqueo -> String
 mostrarParqueo parqueo = "Nombre del Parqueo: " ++ (Parqueo.nombre parqueo) ++ "\n" ++
