@@ -9,7 +9,6 @@ module Main where
         - Alexander Sánchez Céspedes
 --------------------------------------------------------------------------------------------------}
 
-
 import Data.Aeson
 import Data.Aeson.Encode.Pretty
 import GHC.Generics
@@ -19,6 +18,7 @@ import qualified Data.ByteString.Lazy as BS
 import Comercio
 import Bicicleta
 import Parqueo
+import Usuario
 import qualified Utilitarios as UT
 
 editarDatosComercio :: IO ()
@@ -106,15 +106,13 @@ editarDatosComercio = do
         Comercio.guardarComercio comercio
         return ()
 
-mostrarMenuOperativo :: IO ()
-mostrarMenuOperativo = do
-    putStrLn "============ [MENU OPERATIVO] ============"
-    putStrLn "1. Mostrar información del comercio"
-    putStrLn "2. Editar información del comercio"
-    putStrLn "3. Cargar y mostrar parqueos"
-    putStrLn "4. Cargar y mostrar bicicletas"
-    putStrLn "0. Volver al menú principal"
-    putStr "Digite la opcion deseada: \n>"
+mostrarMenuGestionComercio :: IO ()
+mostrarMenuGestionComercio = do
+    putStrLn "================== [GESTION DEL COMERCIO] =================="
+    putStrLn "1. Mostrar información del comercio."
+    putStrLn "2. Editar información del comercio."
+    putStrLn "0. Volver al menú operativo."
+    putStr "Digite la opción deseada: \n>"
     opcion <- getLine
 
     if (UT.verificarEnteroValido opcion) then do
@@ -125,25 +123,372 @@ mostrarMenuOperativo = do
                 Comercio.mostrarComercio
                 putStrLn "===================================================="
                 UT.pausarConsola
-                mostrarMenuOperativo
+                mostrarMenuGestionComercio
             2 -> do
                 editarDatosComercio
+                mostrarMenuGestionComercio
+            0 -> do
+                UT.limpiarConsola
                 mostrarMenuOperativo
+            _ -> do
+                UT.limpiarConsola
+                let msj = "Debe digitar una opción válida."
+                UT.mostrarMensaje "Error" msj "!!"
+                UT.pausarConsola
+                mostrarMenuGestionComercio
+    else do
+        UT.limpiarConsola
+        let msj = "Debe digitar una opción válida."
+        UT.mostrarMensaje "Error" msj "!!"
+        UT.pausarConsola
+        mostrarMenuGestionComercio
+
+mostrarTodosLosParqueos :: IO ()
+mostrarTodosLosParqueos = do
+    UT.limpiarConsola
+    putStrLn "\n============ [INFORMACION DE LOS PARQUEOS] ============"
+    putStr "Ingrese la ubicacion del archivo (enter para el valor por defecto): "
+    direccion <- getLine
+    if (direccion == "") then do
+        Parqueo.mostrarParqueos path_parqueo
+        putStrLn "======================================================="
+        UT.pausarConsola
+        mostrarMenuGestionParqueos
+    else do
+
+    existeArchivo <- UT.verificarArchivoExistente direccion
+    if (existeArchivo == True) then do
+        Parqueo.mostrarParqueos direccion
+        putStrLn "======================================================="
+        UT.pausarConsola
+        mostrarMenuGestionParqueos
+    else do
+        UT.limpiarConsola
+        let msj = "El archivo no existe. Verifique la ruta ingresada."
+        UT.mostrarMensaje "Error" msj "!!"
+        UT.pausarConsola
+        mostrarTodosLosParqueos
+
+solicitarParqueosPorProvincia :: IO ()
+solicitarParqueosPorProvincia = do
+    UT.limpiarConsola
+    putStrLn "\n============ [PARQUEOS POR PROVINCIA] ============"
+    putStr "Ingrese la ubicacion del archivo (enter para el valor por defecto): "
+    direccion <- getLine
+    if (direccion == "") then do
+        putStr "Ingrese la provincia: "
+        provincia <- getLine
+        if (provincia == "") then do
+            UT.limpiarConsola
+            let msj = "Debe digitar una provincia."
+            UT.mostrarMensaje "Error" msj "!!"
+            UT.pausarConsola
+            solicitarParqueosPorProvincia
+        else do
+        let pertenece = UT.strPerteneceALista provincia ["SJ", "LI", "GU", "CA", "HE", "PU", "AL"]
+        if (pertenece == False) then do
+            UT.limpiarConsola
+            let msj = "Debe digitar una provincia válida.\n" ++
+                      "Las provincias válidas son: SJ, LI, GU, CA, HE, PU, AL."
+            UT.mostrarMensaje "Error" msj "!!"
+            UT.pausarConsola
+            solicitarParqueosPorProvincia
+        else do
+            putStrLn "======================================================="
+            Parqueo.mostrarParqueosPorProvincia path_parqueo provincia
+            putStrLn "======================================================="
+            UT.pausarConsola
+            mostrarMenuGestionParqueos
+    else do
+    existeArchivo <- UT.verificarArchivoExistente direccion
+    if (existeArchivo == True) then do
+        putStr "Ingrese la provincia: "
+        provincia <- getLine
+        if (provincia == "") then do
+            UT.limpiarConsola
+            let msj = "Debe digitar una provincia."
+            UT.mostrarMensaje "Error" msj "!!"
+            UT.pausarConsola
+            solicitarParqueosPorProvincia
+        else do
+        let pertenece = UT.strPerteneceALista provincia ["SJ", "LI", "GU", "CA", "HE", "PU", "AL"]
+        if (pertenece == False) then do
+            UT.limpiarConsola
+            let msj = "Debe digitar una provincia válida.\n" ++
+                      "Las provincias válidas son: SJ, LI, GU, CA, HE, PU, AL."
+            UT.mostrarMensaje "Error" msj "!!"
+            UT.pausarConsola
+            solicitarParqueosPorProvincia
+        else do
+            putStrLn "======================================================="
+            Parqueo.mostrarParqueosPorProvincia direccion provincia
+            putStrLn "======================================================="
+            UT.pausarConsola
+            mostrarMenuGestionParqueos
+    else do
+        UT.limpiarConsola
+        let msj = "El archivo no existe. Verifique la ruta ingresada."
+        UT.mostrarMensaje "Error" msj "!!"
+        UT.pausarConsola
+        solicitarParqueosPorProvincia
+
+solicitarBicisDeParqueo :: IO ()
+solicitarBicisDeParqueo = do
+    putStrLn "============ [BICICLETAS DE UN PARQUEO] ============"
+    putStr "Ingrese la ubicacion del archivo (enter para el valor por defecto): "
+    direccion <- getLine
+    if (direccion == "") then do
+        putStrLn "('#' para todos los parqueos/ 'transito' para bicicletas en transito)"
+        putStr "Ingrese el nombre del parqueo: "
+        nombre <- getLine
+        if (nombre == "") then do
+            UT.limpiarConsola
+            let msj = "Debe digitar un nombre."
+            UT.mostrarMensaje "Error" msj "!!"
+            UT.pausarConsola
+            solicitarBicisDeParqueo
+        else if (nombre == "#") then do
+            putStrLn "======================================================="
+            Bicicleta.mostrarBicicletas path_bicicletas
+            putStrLn "======================================================="
+            UT.pausarConsola
+            mostrarMenuGestionParqueos
+        else if (nombre == "transito") then do
+            putStrLn "===============[ BICICLETAS EN TRANSITO ]=============="
+            Bicicleta.mostrarBicicletasEnTransito path_bicicletas
+            putStrLn "======================================================="
+            UT.pausarConsola
+            mostrarMenuGestionParqueos
+        else do
+            putStrLn "======================================================="
+            Bicicleta.mostrarBicicletasDeParqueo nombre path_bicicletas
+            putStrLn "======================================================="
+            UT.pausarConsola
+            mostrarMenuGestionParqueos
+    else do
+    existeArchivo <- UT.verificarArchivoExistente direccion
+    if (existeArchivo == True) then do
+        putStr "Ingrese el nombre del parqueo ('#' para mostrar todas las bicis): "
+        nombre <- getLine
+        if (nombre == "") then do
+            UT.limpiarConsola
+            let msj = "Debe digitar un nombre."
+            UT.mostrarMensaje "Error" msj "!!"
+            UT.pausarConsola
+            solicitarBicisDeParqueo
+        else if (nombre == "#") then do
+            putStrLn "======================================================="
+            Bicicleta.mostrarBicicletas direccion
+            putStrLn "======================================================="
+            UT.pausarConsola
+            mostrarMenuGestionParqueos
+        else if (nombre == "transito") then do
+            putStrLn "===============[ BICICLETAS EN TRANSITO ]=============="
+            Bicicleta.mostrarBicicletasEnTransito direccion
+            putStrLn "======================================================="
+            UT.pausarConsola
+            mostrarMenuGestionParqueos
+        else do
+            putStrLn "======================================================="
+            Bicicleta.mostrarBicicletasDeParqueo nombre direccion
+            putStrLn "======================================================="
+            UT.pausarConsola
+            mostrarMenuGestionParqueos
+    else do
+        UT.limpiarConsola
+        let msj = "El archivo no existe. Verifique la ruta ingresada."
+        UT.mostrarMensaje "Error" msj "!!"
+        UT.pausarConsola
+        solicitarBicisDeParqueo
+
+mostrarMenuGestionParqueos :: IO ()
+mostrarMenuGestionParqueos = do
+    putStrLn "================== [GESTION DE LOS PARQUEOS] =================="
+    putStrLn "1. Mostrar todos los parqueos."
+    putStrLn "2. Mostrar parqueos por provincia."
+    putStrLn "3. Mostrar bicicletas de parqueo. (OP.3)"
+    putStrLn "0. Volver al menú operativo."
+    putStr "Digite la opción deseada: \n>"
+    opcion <- getLine
+
+    if (UT.verificarEnteroValido opcion) then do
+        case (read opcion :: Int) of
+            1 -> mostrarTodosLosParqueos
+            2 -> solicitarParqueosPorProvincia
+            3 -> solicitarBicisDeParqueo
+            0 -> do
+                UT.limpiarConsola
+                mostrarMenuOperativo
+            _ -> do
+                UT.limpiarConsola
+                let msj = "Debe digitar una opción válida."
+                UT.mostrarMensaje "Error" msj "!!"
+                UT.pausarConsola
+                mostrarMenuGestionParqueos
+    else do
+        UT.limpiarConsola
+        let msj = "Debe digitar una opción válida."
+        UT.mostrarMensaje "Error" msj "!!"
+        UT.pausarConsola
+        mostrarMenuGestionParqueos
+
+solicitarTodasLasBicicletas :: IO ()
+solicitarTodasLasBicicletas = do
+    putStrLn "============ [TODAS LAS BICICLETAS] ============"
+    putStr "Ingrese la ubicacion del archivo (enter para el valor por defecto): "
+    direccion <- getLine
+    if (direccion == "") then do
+        putStrLn "======================================================="
+        Bicicleta.mostrarBicicletas path_bicicletas
+        putStrLn "======================================================="
+        UT.pausarConsola
+        mostrarMenuGestionBicicletas
+    else do
+        existeArchivo <- UT.verificarArchivoExistente direccion
+        if (existeArchivo == True) then do
+            putStrLn "======================================================="
+            Bicicleta.mostrarBicicletas direccion
+            putStrLn "======================================================="
+            UT.pausarConsola
+            mostrarMenuGestionBicicletas
+        else do
+            UT.limpiarConsola
+            let msj = "El archivo no existe. Verifique la ruta ingresada."
+            UT.mostrarMensaje "Error" msj "!!"
+            UT.pausarConsola
+            solicitarTodasLasBicicletas
+
+solicitarBicicletasPorTipo :: IO ()
+solicitarBicicletasPorTipo = do
+    putStrLn "============ [BICICLETAS POR TIPO] ============"
+    putStr "Ingrese la ubicacion del archivo (enter para el valor por defecto): "
+    direccion <- getLine
+    if (direccion == "") then do
+        putStr "Ingrese el tipo de bicicleta (TR/AE): "
+        tipo <- getLine
+        let existe = UT.strPerteneceALista tipo ["TR", "AE"]
+        if (existe == False) then do
+            UT.limpiarConsola
+            let msj = "Debe digitar un tipo válido. (TR o AE)"
+            UT.mostrarMensaje "Error" msj "!!"
+            UT.pausarConsola
+            solicitarBicicletasPorTipo
+        else do
+            putStrLn "======================================================="
+            Bicicleta.mostrarBicicletasPorTipo tipo path_bicicletas
+            putStrLn "======================================================="
+            UT.pausarConsola
+            mostrarMenuGestionBicicletas
+    else do
+        existeArchivo <- UT.verificarArchivoExistente direccion
+        if (existeArchivo == True) then do
+            putStr "Ingrese el tipo de bicicleta (TR/AE): "
+            tipo <- getLine
+            let existe = UT.strPerteneceALista tipo ["TR", "AE"]
+            if (existe == False) then do
+                UT.limpiarConsola
+                let msj = "Debe digitar un tipo válido. (TR o AE)"
+                UT.mostrarMensaje "Error" msj "!!"
+                UT.pausarConsola
+                solicitarBicicletasPorTipo
+            else do
+                putStrLn "======================================================="
+                Bicicleta.mostrarBicicletasPorTipo tipo direccion
+                putStrLn "======================================================="
+                UT.pausarConsola
+                mostrarMenuGestionBicicletas
+        else do
+            UT.limpiarConsola
+            let msj = "El archivo no existe. Verifique la ruta ingresada."
+            UT.mostrarMensaje "Error" msj "!!"
+            UT.pausarConsola
+            solicitarBicicletasPorTipo
+
+mostrarMenuGestionBicicletas :: IO ()
+mostrarMenuGestionBicicletas = do
+    putStrLn "================== [GESTION DE BICICLETAS] =================="
+    putStrLn "1. Mostrar todas las bicicletas."
+    putStrLn "2. Mostrar bicicletas por tipo."
+    putStrLn "0. Volver al menú operativo."
+    putStr "Digite la opción deseada: \n>"
+    opcion <- getLine
+
+    if (UT.verificarEnteroValido opcion) then do
+        case (read opcion :: Int) of
+            1 -> do
+                UT.limpiarConsola
+                solicitarTodasLasBicicletas
+            2 -> do
+                UT.limpiarConsola
+                solicitarBicicletasPorTipo
+            0 -> do
+                UT.limpiarConsola
+                mostrarMenuOperativo
+            _ -> do
+                UT.limpiarConsola
+                let msj = "Debe digitar una opción válida."
+                UT.mostrarMensaje "Error" msj "!!"
+                UT.pausarConsola
+                mostrarMenuGestionBicicletas
+    else do
+        UT.limpiarConsola
+        let msj = "Debe digitar una opción válida."
+        UT.mostrarMensaje "Error" msj "!!"
+        UT.pausarConsola
+        mostrarMenuGestionBicicletas
+
+mostrarUsuariosRegistrados :: IO ()
+mostrarUsuariosRegistrados = do
+    putStrLn "============ [USUARIOS REGISTRADOS] ============"
+    putStr "Ingrese la ubicacion del archivo (enter para el valor por defecto): "
+    direccion <- getLine
+    if (direccion == "") then do
+        putStrLn "======================================================="
+        Usuario.mostrarUsuarios path_usuarios
+        putStrLn "======================================================="
+        UT.pausarConsola
+        mostrarMenuOperativo
+    else do
+        existeArchivo <- UT.verificarArchivoExistente direccion
+        if (existeArchivo == True) then do
+            putStrLn "======================================================="
+            Usuario.mostrarUsuarios direccion
+            putStrLn "======================================================="
+            UT.pausarConsola
+            mostrarMenuOperativo
+        else do
+            UT.limpiarConsola
+            let msj = "El archivo no existe. Verifique la ruta ingresada."
+            UT.mostrarMensaje "Error" msj "!!"
+            UT.pausarConsola
+            mostrarUsuariosRegistrados
+
+mostrarMenuOperativo :: IO ()
+mostrarMenuOperativo = do
+    putStrLn "============ [MENU OPERATIVO] ============"
+    putStrLn "1. Gestión del comercio (info. comercial)"
+    putStrLn "2. Gestión de los parqueos"
+    putStrLn "3. Gestión de las bicicletas"
+    putStrLn "4. Mostrar usuarios registrados"
+    putStrLn "5. Estadísticas... (pendiente)"
+    putStrLn "0. Volver al menú principal"
+    putStr "Digite la opcion deseada: \n>"
+    opcion <- getLine
+
+    if (UT.verificarEnteroValido opcion) then do
+        case (read opcion :: Int) of
+            1 -> do
+                UT.limpiarConsola
+                mostrarMenuGestionComercio
+            2 -> do
+                UT.limpiarConsola
+                mostrarMenuGestionParqueos
             3 -> do
                 UT.limpiarConsola
-                putStrLn "\n============ [INFORMACION DE LOS PARQUEOS] ============"
-                putStr "Ingrese la ubicacion del archivo: "
-                direccion <- getLine
-                Parqueo.mostrarParqueos direccion                
-                UT.pausarConsola
-                mostrarMenuOperativo
+                mostrarMenuGestionBicicletas
             4 -> do
                 UT.limpiarConsola
-                putStrLn "============ [BICICLETAS] ============"
-                Bicicleta.mostrarBicicletas
-                putStrLn "======================================"
-                UT.pausarConsola
-                mostrarMenuOperativo
+                mostrarUsuariosRegistrados
             0 -> putStrLn "Saliendo..."
             _ -> do
                 UT.limpiarConsola
