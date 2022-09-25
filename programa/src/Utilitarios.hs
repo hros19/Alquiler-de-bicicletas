@@ -1,12 +1,5 @@
 
-module Utilitarios(
-    mostrarMensaje,
-    verificarEnteroValido,
-    verificarFlotanteValido,
-    verificarNumeroPositivo,
-    limpiarConsola,
-    pausarConsola,
-) where
+module Utilitarios where
 
 {--------------------------------------------------------------------------------------------------
     Módulo: Utilitarios
@@ -19,6 +12,7 @@ module Utilitarios(
 import System.IO()
 import System.Info
 import System.Process
+import System.Directory
 import Text.Read
 
 {-
@@ -78,6 +72,20 @@ verificarNumeroPositivo strNumero
     | ((readMaybe strNumero :: Maybe Double) == Nothing) = False
     | (read strNumero :: Double) < 0 = False
     | otherwise = True
+
+verificarArchivoExistente :: String -> IO Bool
+verificarArchivoExistente ruta = do
+    existe <- (doesFileExist ruta)
+    return (existe :: Bool)
+
+strPerteneceALista :: String -> [String] -> Bool
+strPerteneceALista str lista = do
+    if (length lista) == 0 then
+        False
+    else if (str == (head lista)) then
+        True
+    else
+        strPerteneceALista str (tail lista)
 
 {-
     Función: limpiarConsola
