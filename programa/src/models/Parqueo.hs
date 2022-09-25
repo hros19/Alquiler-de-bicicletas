@@ -7,6 +7,9 @@ import Data.Aeson.Encode.Pretty
 import GHC.Generics
 import qualified Data.ByteString.Lazy as BS
 
+-- Variables globales
+path_parqueo :: FilePath
+path_parqueo = "./src/data/parqueo.json"
 
 {--------------------------------------------------------------------------------------------------
 Modelo: Parqueo
