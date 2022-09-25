@@ -13,7 +13,7 @@ path_bicicletas :: FilePath
 path_bicicletas = "./src/data/bicicletas.json"
 
 {--------------------------------------------------------------------------------------------------
-Modelo: Bicicletas
+Modelo: Bicicleta
 Versión: 1.0 (24 de setiembre del 2022)
 Autor: Hansol Antay Rostrán (https://github.com/hros19)
 ---------------------------------------------------------------------------------------------------
@@ -35,17 +35,17 @@ data Bicicleta = Bicicleta {
 instance FromJSON Bicicleta
 instance ToJSON Bicicleta
 
-obtenerBicicletas :: IO [Bicicleta]
-obtenerBicicletas = do
-    contenido <- BS.readFile path_bicicletas
+obtenerBicicletas :: String -> IO [Bicicleta]
+obtenerBicicletas path = do
+    contenido <- BS.readFile path
     let bicicletas = decode contenido :: Maybe [Bicicleta]
     case bicicletas of
         Nothing -> return []
         Just bicicletas -> return bicicletas
 
-obtenerBicicleta :: String -> IO (Maybe Bicicleta)
-obtenerBicicleta codigo = do
-    bicicletas <- obtenerBicicletas
+obtenerBicicleta :: String -> String -> IO (Maybe Bicicleta)
+obtenerBicicleta codigo path = do
+    bicicletas <- obtenerBicicletas path
     return (obtenerBicicleta' codigo bicicletas)
 
 obtenerBicicleta' :: String -> [Bicicleta] -> Maybe Bicicleta
@@ -54,9 +54,9 @@ obtenerBicicleta' codigo (x:xs)
     | codigo == (Bicicleta.codigo x) = Just x
     | otherwise = obtenerBicicleta' codigo xs
 
-eliminarBicicleta :: String -> IO ()
-eliminarBicicleta codigo = do
-    bicicletas <- obtenerBicicletas
+eliminarBicicleta :: String -> String -> IO ()
+eliminarBicicleta codigo path = do
+    bicicletas <- obtenerBicicletas path
     let bicicletas' = eliminarBicicleta' codigo bicicletas
     BS.writeFile path_bicicletas (encodePretty bicicletas')
 
@@ -66,9 +66,9 @@ eliminarBicicleta' codigo (x:xs)
     | codigo == (Bicicleta.codigo x) = xs
     | otherwise = x : eliminarBicicleta' codigo xs
 
-actualizarBicicleta :: Bicicleta -> IO ()
-actualizarBicicleta bicicleta = do
-    bicicletas <- obtenerBicicletas
+actualizarBicicleta :: Bicicleta -> String -> IO ()
+actualizarBicicleta bicicleta path = do
+    bicicletas <- obtenerBicicletas path
     let bicicletas' = actualizarBicicleta' bicicleta bicicletas
     BS.writeFile path_bicicletas (encodePretty bicicletas')
 
@@ -79,19 +79,60 @@ actualizarBicicleta' bicicleta (x:xs)
     | otherwise = x : actualizarBicicleta' bicicleta xs
 
 mostrarBicicleta :: Bicicleta -> String
-mostrarBicicleta bicicleta = "Código: " ++ (Bicicleta.codigo bicicleta) ++ "\n" ++
-                             "Tipo: " ++ (Bicicleta.tipo bicicleta) ++ "\n" ++
-                             "Parqueo: " ++ (Bicicleta.parqueo bicicleta)
+mostrarBicicleta bicicleta 
+    | (Bicicleta.parqueo bicicleta) == "" = ""
+    | otherwise = "Código: " ++ (Bicicleta.codigo bicicleta) ++ "\n" ++
+                  "Tipo: " ++ (Bicicleta.tipo bicicleta) ++ "\n" ++
+                  "Parqueo: " ++ (Bicicleta.parqueo bicicleta) ++ "\n" ++
+                  "--------------------------------------------\n"
 
-mostrarBicicletas :: IO ()
-mostrarBicicletas = do
-    bicicletas <- obtenerBicicletas
+mostrarBicicletaEnTransito :: Bicicleta -> String
+mostrarBicicletaEnTransito bicicleta = "Código: " ++ (Bicicleta.codigo bicicleta) ++ "\n" ++
+                                       "Tipo: " ++ (Bicicleta.tipo bicicleta) ++ "\n" ++
+                                       "Parqueo: En Tránsito\n" ++
+                                       "--------------------------------------------\n"
+
+mostrarBicicletas :: String -> IO ()
+mostrarBicicletas path = do
+    bicicletas <- obtenerBicicletas path
     putStrLn (mostrarBicicletas' bicicletas)
 
 mostrarBicicletas' :: [Bicicleta] -> String
 mostrarBicicletas' [] = ""
-mostrarBicicletas' (x:xs) = (mostrarBicicleta x) ++ 
-                            "\n----------------------------------\n" ++
-                            (mostrarBicicletas' xs)
+mostrarBicicletas' (x:xs) = (mostrarBicicleta x) ++ (mostrarBicicletas' xs)
 
+mostrarBicicletasEnTransito :: String -> IO ()
+mostrarBicicletasEnTransito path = do
+    bicicletas <- obtenerBicicletas path
+    putStrLn (mostrarBicicletasEnTransito' bicicletas)
 
+mostrarBicicletasEnTransito' :: [Bicicleta] -> String
+mostrarBicicletasEnTransito' [] = ""
+mostrarBicicletasEnTransito' (x:xs)
+    | (Bicicleta.parqueo x) == "" = (mostrarBicicletaEnTransito x) ++
+                                    (mostrarBicicletasEnTransito' xs)
+    | otherwise = mostrarBicicletasEnTransito' xs
+
+mostrarBicicletasDeParqueo :: String -> String -> IO ()
+mostrarBicicletasDeParqueo parqueo path = do
+    bicicletas <- obtenerBicicletas path
+    putStrLn (mostrarBicicletasDeParqueo' parqueo bicicletas)
+
+mostrarBicicletasDeParqueo' :: String -> [Bicicleta] -> String
+mostrarBicicletasDeParqueo' parqueo [] = ""
+mostrarBicicletasDeParqueo' parqueo (x:xs)
+    | parqueo == (Bicicleta.parqueo x) = (mostrarBicicleta x) ++
+                                         (mostrarBicicletasDeParqueo' parqueo xs)
+    | otherwise = mostrarBicicletasDeParqueo' parqueo xs
+
+mostrarBicicletasPorTipo :: String -> String -> IO ()
+mostrarBicicletasPorTipo tipo path = do
+    bicicletas <- obtenerBicicletas path
+    putStrLn (mostrarBicicletasPorTipo' tipo bicicletas)
+
+mostrarBicicletasPorTipo' :: String -> [Bicicleta] -> String
+mostrarBicicletasPorTipo' tipo [] = ""
+mostrarBicicletasPorTipo' tipo (x:xs)
+    | tipo == (Bicicleta.tipo x) = (mostrarBicicleta x) ++
+                                   (mostrarBicicletasPorTipo' tipo xs)
+    | otherwise = mostrarBicicletasPorTipo' tipo xs
