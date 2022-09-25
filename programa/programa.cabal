@@ -30,6 +30,7 @@ library
       Bicicleta
       Comercio
       Parqueo
+      Usuario
   other-modules:
       Paths_programa
   hs-source-dirs:
@@ -43,6 +44,7 @@ library
     , aeson-pretty
     , base >=4.7 && <5
     , bytestring
+    , directory
     , process
   default-language: Haskell2010
 
@@ -58,6 +60,7 @@ executable programa-exe
     , aeson-pretty
     , base >=4.7 && <5
     , bytestring
+    , directory
     , process
     , programa
   default-language: Haskell2010
@@ -75,6 +78,7 @@ test-suite programa-test
     , aeson-pretty
     , base >=4.7 && <5
     , bytestring
+    , directory
     , process
     , programa
   default-language: Haskell2010
