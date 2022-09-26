@@ -646,9 +646,9 @@ solicitarAlquilerBicicleta = do
         bExisteBici <- Bicicleta.bicicletaPerteneceAParqueo codigoBici parqueoSalida path_bicicletas
         if (bExisteBici == True) then do
             id_fac_generado <- obtenerIdFacturaNuevo
-            let nuevaFactura = Factura id_fac_generado cedula codigoBici parqueoSalida parqueoLlegada "En tránsito"
+            let nuevaFactura = Factura id_fac_generado cedula parqueoSalida parqueoLlegada codigoBici "activo"
             Factura.agregarFactura nuevaFactura
-            bic <- Bicicleta.obtenerBicicleta "B015" "./src/data/bicicletas.json"
+            bic <- Bicicleta.obtenerBicicleta codigoBici "./src/data/bicicletas.json"
             Bicicleta.cambiarParqueo bic "En tránsito" "./src/data/bicicletas.json"
             UT.limpiarConsola
             let msj = "La bicicleta ha sido alquilada."
@@ -747,6 +747,63 @@ solicitarAlquilerBicicleta = do
             UT.pausarConsola
             solicitarAlquilerBicicleta
 
+realizarFacturacion :: IO ()
+realizarFacturacion = do
+    putStrLn "============ [REALIZAR FACTURACION] ============"
+    putStr "Ingrese el id de la factura: "
+    idFactura <- getLine
+    
+    if (UT.verificarEnteroValido idFactura) then do
+        bExisteFactura <- Factura.existeFactura (read idFactura :: Int)
+        if (bExisteFactura == True) then do
+            UT.limpiarConsola
+            factura <- Factura.obtenerFactura (read idFactura :: Int)
+            let estadoActualFactura = Factura.estado factura
+            if (estadoActualFactura == "facturado") then do
+                UT.limpiarConsola
+                let msj = "La factura ya se encuentra facturada."
+                UT.mostrarMensaje "Error" msj "!!"
+                UT.pausarConsola
+                mostrarMenuGeneral
+            else do
+            putStrLn "====================== [DETALLE DE FACTURA] ======================"
+            putStrLn ("Número de factura: " ++ show (Factura.idFactura factura))
+            putStrLn ("----------------------------------------------")
+            Comercio.mostrarComercioSinTarifas
+            putStrLn ("----------------------------------------------")
+            usuarioFac <- Usuario.obtenerUsuario "./src/data/usuarios.json" (Factura.cedulaCliente factura)
+            putStr (Usuario.mostrarUsuario usuarioFac)
+            bicicletaFac <- Bicicleta.obtenerBicicleta (Factura.codigoBici factura) "./src/data/bicicletas.json"
+            putStrLn "(TR) Tradicional | (AE) Asistencia eléctrica"
+            putStr (Bicicleta.mostrarBicicletaEnTransito bicicletaFac)
+            parqueoSal <- Parqueo.obtenerParqueo "./src/data/parqueo.json" (Factura.parqueoSalida factura)
+            parqueoLleg <- Parqueo.obtenerParqueo "./src/data/parqueo.json" (Factura.parqueoLlegada factura)
+            putStrLn $ "-- > Parqueo de salida\n" ++ (Parqueo.mostrarParqueo parqueoSal) ++ "\n"
+            putStrLn $ "-- > Parqueo de llegada\n" ++ (Parqueo.mostrarParqueo parqueoLleg)
+            let distanciaRecorrida = Parqueo.distanciaEntreDosParqueos parqueoSal parqueoLleg
+            putStrLn ("\nDistancia recorrida: " ++ show distanciaRecorrida ++ " km")
+            tarifa <- Comercio.obtenerTarifaSegunTipo (Bicicleta.tipo bicicletaFac)
+            putStrLn ("Tarifa aplicada: " ++ show tarifa ++ "$ por km")
+            let costoTotal = tarifa * distanciaRecorrida
+            putStrLn ("Costo total: " ++ show costoTotal ++ "$")
+            putStrLn "==============================================================="
+            let facturaActualizada = Factura (Factura.idFactura factura) (Factura.cedulaCliente factura) (Factura.parqueoSalida factura) (Factura.parqueoLlegada factura) (Factura.codigoBici factura) "facturado"
+            Factura.actualizarFactura facturaActualizada
+            UT.pausarConsola
+            mostrarMenuGeneral
+        else do
+            UT.limpiarConsola
+            let msj = "El id de la factura ingresado no existe."
+            UT.mostrarMensaje "Error" msj "!!"
+            UT.pausarConsola
+            realizarFacturacion
+    else do
+        UT.limpiarConsola
+        let msj = "El id de la factura debe ser un número entero."
+        UT.mostrarMensaje "Error" msj "!!"
+        UT.pausarConsola
+        realizarFacturacion
+    
 mostrarMenuGeneral :: IO ()
 mostrarMenuGeneral = do
     putStrLn "============ [MENU GENERAL] ============"
@@ -767,7 +824,7 @@ mostrarMenuGeneral = do
                 solicitarAlquilerBicicleta
             3 -> do
                 UT.limpiarConsola
-                mostrarMenuGestionBicicletas
+                realizarFacturacion
             0 -> do
                 UT.limpiarConsola
                 mostrarMenuPrincipal
