@@ -1,7 +1,7 @@
 {
-    "contacto": "hello@cleticas.cr",
-    "nombre": "CleTicas CR",
-    "tarifaColonesKmElectrico": 250.0,
-    "tarifaColonesKmPedal": 405.5,
-    "web": "https://cleTicas.com"
+    "contacto": "hola@cleticas.cr",
+    "nombre": "CleTicas",
+    "tarifaColonesKmElectrico": 705.5,
+    "tarifaColonesKmPedal": 400,
+    "web": "https://cleticas.cr"
 }

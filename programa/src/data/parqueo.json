@@ -1,43 +1,24 @@
 
-[{
-    "nombre":"ParkaLots",
-    "direccion":"Del palo de mango, hacia la izquierda no es, es hacia la derecha, recto hasta el otro palo de mango",
-    "provincia":"Puerto Limon",
-    "x":4,
-    "y":2
-},
-{
-    "nombre":"Puerta de Vroom",
-    "direccion":"Del palo de mango, hacia la izquierda no es, es hacia la derecha, recto hasta el otro palo de mango",
-    "provincia":"Puerto Limon",
-    "x":4,
-    "y":2
-},
-{
-    "nombre":"Cosas Motel",
-    "direccion":"Del palo de mango, hacia la izquierda no es, es hacia la derecha, recto hasta el otro palo de mango",
-    "provincia":"Puerto Limon",
-    "x":4,
-    "y":2
-},
-{
-    "nombre":"AparcamientoAbyss",
-    "direccion":"Del palo de mango, hacia la izquierda no es, es hacia la derecha, recto hasta el otro palo de mango",
-    "provincia":"Puerto Limon",
-    "x":4,
-    "y":2
-},
-{
-    "nombre":"Almacenamiento Domosillius",
-    "direccion":"Del palo de mango, hacia la izquierda no es, es hacia la derecha, recto hasta el otro palo de mango",
-    "provincia":"Puerto Limon",
-    "x":4,
-    "y":2
-},
-{
-    "nombre":"IdleAutos",
-    "direccion":"Del palo de mango, hacia la izquierda no es, es hacia la derecha, recto hasta el otro palo de mango",
-    "provincia":"Puerto Limon",
-    "x":4,
-    "y":2
-}]
+[
+    {
+        "nombre":"PARQ01",
+        "direccion":"Av. 1, en el parque",
+        "provincia":"LI",
+        "x":111.8,
+        "y":76.3
+    },
+    {
+        "nombre":"PARQ02",
+        "direccion":"Por el palo de mango",
+        "provincia":"SJ",
+        "x":50.5,
+        "y":3.4
+    },
+    {
+        "nombre":"PARQ03",
+        "direccion":"Por ahí en el centro",
+        "provincia":"GU",
+        "x":175.4,
+        "y":201.2
+    }
+]

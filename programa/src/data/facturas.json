@@ -1,0 +1,10 @@
+[
+    {
+        "cedulaCliente": "987654321",
+        "codigoBici": "B004",
+        "estado": "facturado",
+        "idFactura": 197831,
+        "parqueoLlegada": "PARQ02",
+        "parqueoSalida": "PARQ01"
+    }
+]

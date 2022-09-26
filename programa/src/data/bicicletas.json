@@ -1,0 +1,77 @@
+[
+    {
+        "codigo": "B001",
+        "parqueo": "PARQ01",
+        "tipo": "TR"
+    },
+    {
+        "codigo": "B002",
+        "parqueo": "PARQ01",
+        "tipo": "AE"
+    },
+    {
+        "codigo": "B003",
+        "parqueo": "PARQ01",
+        "tipo": "AE"
+    },
+    {
+        "codigo": "B004",
+        "parqueo": "En tránsito",
+        "tipo": "TR"
+    },
+    {
+        "codigo": "B005",
+        "parqueo": "PARQ02",
+        "tipo": "AE"
+    },
+    {
+        "codigo": "B006",
+        "parqueo": "PARQ02",
+        "tipo": "TR"
+    },
+    {
+        "codigo": "B007",
+        "parqueo": "PARQ02",
+        "tipo": "AE"
+    },
+    {
+        "codigo": "B008",
+        "parqueo": "PARQ02",
+        "tipo": "AE"
+    },
+    {
+        "codigo": "B009",
+        "parqueo": "PARQ02",
+        "tipo": "AE"
+    },
+    {
+        "codigo": "B010",
+        "parqueo": "PARQ02",
+        "tipo": "TR"
+    },
+    {
+        "codigo": "B011",
+        "parqueo": "PARQ03",
+        "tipo": "AE"
+    },
+    {
+        "codigo": "B012",
+        "parqueo": "PARQ03",
+        "tipo": "TR"
+    },
+    {
+        "codigo": "B013",
+        "parqueo": "PARQ03",
+        "tipo": "AE"
+    },
+    {
+        "codigo": "B014",
+        "parqueo": "PARQ03",
+        "tipo": "TR"
+    },
+    {
+        "codigo": "B015",
+        "parqueo": "PARQ03",
+        "tipo": "AE"
+    }
+]
