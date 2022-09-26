@@ -13,6 +13,7 @@ import System.IO()
 import System.Info
 import System.Process
 import System.Directory
+import System.Random
 import Text.Read
 
 {-
@@ -118,3 +119,8 @@ pausarConsola = do
     _ <- getChar
     limpiarConsola
     return ()
+
+generarIdFactura :: IO Int
+generarIdFactura = do
+    idFactura <- randomRIO (1, 1000000)
+    return (idFactura :: Int)
