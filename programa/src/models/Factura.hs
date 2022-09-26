@@ -95,4 +95,14 @@ existeFactura' idF (x:xs)
     | idF == (idFactura x) = True
     | otherwise = existeFactura' idF xs
 
+obtenerFactura :: Int -> IO Factura
+obtenerFactura idFactura = do
+    facturas <- obtenerFacturas
+    return (obtenerFactura' idFactura facturas)
+
+obtenerFactura' :: Int -> [Factura] -> Factura
+obtenerFactura' idF [] = Factura 0 "" "" "" "" ""
+obtenerFactura' idF (x:xs)
+    | idF == (idFactura x) = x
+    | otherwise = obtenerFactura' idF xs
 
