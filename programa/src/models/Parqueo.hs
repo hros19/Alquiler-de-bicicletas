@@ -163,3 +163,16 @@ mostrarParqueosPorProvincia' (x:xs) provincia =
     if (Parqueo.provincia x) == provincia then (mostrarParqueo x) ++ "\n-----------------------------------------------------\n" ++
         (mostrarParqueosPorProvincia' xs provincia) 
     else mostrarParqueosPorProvincia' xs provincia
+
+obtenerParqueo :: String -> String -> IO Parqueo
+obtenerParqueo path nombre = do
+    parqueos <- obtenerParqueos path
+    return (obtenerParqueo' parqueos nombre)
+
+obtenerParqueo' :: [Parqueo] -> String -> Parqueo
+obtenerParqueo' [] nombre = Parqueo "" "" "" 0 0
+obtenerParqueo' (x:xs) nombre = 
+    if (Parqueo.nombre x) == nombre then x else obtenerParqueo' xs nombre
+
+distanciaEntreDosParqueos :: Parqueo -> Parqueo -> Double
+distanciaEntreDosParqueos parqueo1 parqueo2 = sqrt(((Parqueo.x parqueo1 - Parqueo.x parqueo2)^2) + ((Parqueo.y parqueo1 - Parqueo.y parqueo2)^2))
