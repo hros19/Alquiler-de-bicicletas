@@ -41,10 +41,21 @@ obtenerUsuarios path = do
         Just usuarios -> usuarios
         Nothing -> [])
 
+obtenerUsuario :: String -> String -> IO Usuario
+obtenerUsuario path cedula = do
+    usuarios <- obtenerUsuarios path
+    return (obtenerUsuario' usuarios cedula)
+
+obtenerUsuario' :: [Usuario] -> String -> Usuario
+obtenerUsuario' [] ced = Usuario "" ""
+obtenerUsuario' (x:xs) ced
+    | ced == (cedula x) = x
+    | otherwise = obtenerUsuario' xs ced
+
 mostrarUsuario :: Usuario -> String
 mostrarUsuario usuario = "Cédula: " ++ (Usuario.cedula usuario) ++ "\n" ++
                          "Nombre: " ++ (Usuario.nombre usuario) ++ "\n" ++
-                         "--------------------------------------------\n"
+                         "-----------------------------------------------\n"
 
 mostrarUsuarios :: String -> IO ()
 mostrarUsuarios path = do
