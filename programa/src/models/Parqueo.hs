@@ -106,6 +106,41 @@ mostrarParqueos' [] = ""
 mostrarParqueos' (x:xs) = (mostrarParqueo x) ++ "\n--------------------------------------------------------------------------------------------------\n" ++(mostrarParqueos' xs)
 
 {-
+    Nombre: obtenerDistancias
+    Descripcion: obtiene la distance entre un punto y todos los parqueos
+    Entradas: 
+        - lista de parqueos - Todos los parqueos para calcular las distancias
+        - coordenada x - Coordenada x del punto
+        - coordenada y - Coordenada y del punto
+    Salidas: lista de tuplas con el nombre del parqueo y la distancia
+-}
+obtenerDistancias :: [Parqueo] -> Double -> Double -> [(Double, String)]
+obtenerDistancias [] x y = []
+obtenerDistancias (x:xs) x1 y1 = [(sqrt(((x1 - (Parqueo.x x))^2) + ((y1 - (Parqueo.y x))^2)), Parqueo.nombre x)] ++ obtenerDistancias xs x1 y1
+
+{-
+    Nombre: obtenerMenoDistancia
+    Descripcion: obtiene el menor valor de una lista de tuplas con el nombre del parqueo y la distancia
+    Entradas: lista de tuplas con el nombre del parqueo y la distancia
+    Salidas: tupla con el nombre del parqueo y la distancia
+-}
+obtenerMenorDistancia :: [(Double, String)] -> (Double, String)
+obtenerMenorDistancia [] = (0, "")
+obtenerMenorDistancia (x:xs) = obtenerMenorDistancia' (x:xs) x
+
+{-
+    Nombre: obtenerMenoDistancia' (Auxiliar)
+    Descripcion: Va comparando los valores de la lista de tuplas y retorna el menor
+    Entradas:
+        - lista de tuplas con el nombre del parqueo y la distancia
+        - tupla con el nombre del parqueo y la distancia *actual
+    Salidas: tupla con el nombre del parqueo y la distancia
+-}
+obtenerMenorDistancia' :: [(Double, String)] -> (Double, String) -> (Double, String)
+obtenerMenorDistancia' [] menor = menor
+obtenerMenorDistancia' (x:xs) menor = if (fst x) < (fst menor) then obtenerMenorDistancia' xs x else obtenerMenorDistancia' xs menor
+
+{-
     Nombre: mostrarParqueosPorProvincia
     Descripcion: funcion que imprime los parqueos apartir de una provincia
     Entradas: ubicacion del archivo - nombre de la provincia
