@@ -54,3 +54,14 @@ mostrarUsuarios path = do
 mostrarUsuarios' :: [Usuario] -> String
 mostrarUsuarios' [] = ""
 mostrarUsuarios' (x:xs) = (mostrarUsuario x) ++ (mostrarUsuarios' xs)
+
+existeCedula :: String -> String -> IO Bool
+existeCedula cedula path = do
+    usuarios <- obtenerUsuarios path
+    return (existeCedula' cedula usuarios)
+
+existeCedula' :: String -> [Usuario] -> Bool
+existeCedula' _ [] = False
+existeCedula' cedula (x:xs) = 
+    if (Usuario.cedula x) == cedula then True 
+    else existeCedula' cedula xs
