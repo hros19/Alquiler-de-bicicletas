@@ -9,9 +9,11 @@ module Main where
         - Alexander Sánchez Céspedes
 --------------------------------------------------------------------------------------------------}
 
+import Data.Maybe
 import Data.Aeson
 import Data.Aeson.Encode.Pretty
 import GHC.Generics
+import Data.Tuple.Select
 import qualified Data.ByteString.Lazy as BS
 
 -- Importaciones locales
@@ -19,6 +21,7 @@ import Comercio
 import Bicicleta
 import Parqueo
 import Usuario
+import Factura
 import qualified Utilitarios as UT
 
 editarDatosComercio :: IO ()
@@ -489,7 +492,285 @@ mostrarMenuOperativo = do
             4 -> do
                 UT.limpiarConsola
                 mostrarUsuariosRegistrados
-            0 -> putStrLn "Saliendo..."
+            0 -> do
+                UT.limpiarConsola
+                mostrarMenuPrincipal
+            _ -> do
+                UT.limpiarConsola
+                let msj = "Debe digitar una opcion valida." ++
+                          "Digito: `" ++ opcion ++ "`" ++
+                          "Opciones validas: 1, 2, 3"
+                UT.mostrarMensaje "Error" msj "!!"
+                UT.pausarConsola
+                mostrarMenuPrincipal
+    else do
+        UT.limpiarConsola
+        let msj = "Debe digitar un número entero válido.\n" ++
+                  "Digito: `" ++ opcion ++ "`\n" ++
+                  "Valores validos: 1, 2, 3"
+        UT.mostrarMensaje "Error" msj "!!"
+        UT.pausarConsola
+        mostrarMenuPrincipal
+
+solicitarParqueoMasCercano :: IO ()
+solicitarParqueoMasCercano = do
+    putStrLn "============ [PARQUEO MAS CERCANO] ============"
+    putStr "Ingrese la ubicacion del archivo (enter para el valor por defecto): "
+    direccion <- getLine
+    if (direccion == "") then do
+        putStr "Ingrese la coordenada en x: "
+        x <- getLine
+        if (UT.verificarNumeroPositivo x) then do
+            putStr "Ingrese la coordenada en y: "
+            y <- getLine
+            if (UT.verificarNumeroPositivo y) then do
+                UT.limpiarConsola
+                parqueos <- Parqueo.obtenerParqueos "./src/data/parqueo.json"
+                let distancias = Parqueo.obtenerDistancias parqueos (read x :: Double) (read y :: Double)
+                let menorDistancia = Parqueo.obtenerMenorDistancia distancias
+                let nombreParqueo = sel2 menorDistancia
+                let distancia = sel1 menorDistancia
+                let msj = "El parqueo mas cercano es: " ++ nombreParqueo ++ " a " ++ (show distancia) ++ " metros."
+                UT.mostrarMensaje "Resultado" msj "!!"
+                UT.pausarConsola
+                mostrarMenuGeneral
+            else do
+                UT.limpiarConsola
+                let msj = "Debe digitar un número positivo."
+                UT.mostrarMensaje "Error" msj "!!"
+                UT.pausarConsola
+                solicitarParqueoMasCercano
+        else do
+            UT.limpiarConsola
+            let msj = "Debe digitar un número positivo."
+            UT.mostrarMensaje "Error" msj "!!"
+            UT.pausarConsola
+            solicitarParqueoMasCercano
+    else do
+        existeArchivo <- UT.verificarArchivoExistente direccion
+        if (existeArchivo == True) then do
+            putStr "Ingrese la coordenada en x: "
+            x <- getLine
+            if (UT.verificarNumeroPositivo x) then do
+                putStr "Ingrese la coordenada en y: "
+                y <- getLine
+                if (UT.verificarNumeroPositivo y) then do
+                    UT.limpiarConsola
+                    parqueos <- Parqueo.obtenerParqueos "./src/data/parqueo.json"
+                    let distancias = Parqueo.obtenerDistancias parqueos (read x :: Double) (read y :: Double)
+                    let menorDistancia = Parqueo.obtenerMenorDistancia distancias
+                    let nombreParqueo = sel2 menorDistancia
+                    let distancia = sel1 menorDistancia
+                    let msj = "El parqueo mas cercano es: " ++ nombreParqueo ++ " a " ++ (show distancia) ++ " metros."
+                    UT.mostrarMensaje "Resultado" msj "!!"
+                    UT.pausarConsola
+                    mostrarMenuGeneral
+                else do
+                    UT.limpiarConsola
+                    let msj = "Debe digitar un número positivo."
+                    UT.mostrarMensaje "Error" msj "!!"
+                    UT.pausarConsola
+                    solicitarParqueoMasCercano
+            else do
+                UT.limpiarConsola
+                let msj = "Debe digitar un número positivo."
+                UT.mostrarMensaje "Error" msj "!!"
+                UT.pausarConsola
+                solicitarParqueoMasCercano
+        else do
+            UT.limpiarConsola
+            let msj = "El archivo no existe. Verifique la ruta ingresada."
+            UT.mostrarMensaje "Error" msj "!!"
+            UT.pausarConsola
+            solicitarParqueoMasCercano
+
+obtenerIdFacturaNuevo :: IO Int
+obtenerIdFacturaNuevo = do
+    nuevoId <- UT.generarIdFactura
+    existeId <- Factura.existeFactura nuevoId
+    if (existeId == True) then do
+        obtenerIdFacturaNuevo
+    else do
+        return nuevoId
+
+solicitarAlquilerBicicleta :: IO ()
+solicitarAlquilerBicicleta = do
+    putStrLn "============ [ALQUILER DE BICICLETA] ============"
+    putStr "Ingrese la ubicacion del archivo de las bicicletas (enter para el valor por defecto): "
+    direccion <- getLine
+    if (direccion == "") then do
+        putStr "Ingrese la cedula del usuario: "
+        cedula <- getLine
+        bExisteCed <- Usuario.existeCedula cedula "./src/data/usuarios.json"
+        if (bExisteCed == True) then do
+        -- El usuario existe
+
+        putStr "Ingrese el parqueo de salida: "
+        parqueoSalida <- getLine
+        putStr "Ingrese el parqueo de llegada: "
+        parqueoLlegada <- getLine
+
+        bExisteParqSal <- Parqueo.existeParqueo "./src/data/parqueo.json" parqueoSalida
+        bExisteParqLleg <- Parqueo.existeParqueo "./src/data/parqueo.json" parqueoLlegada
+
+        if (bExisteParqSal == False || bExisteParqLleg == False) then do
+            UT.limpiarConsola
+            let msj = "Debe ingresar parqueos existentes."
+            UT.mostrarMensaje "Error" msj "!!"
+            UT.pausarConsola
+            solicitarAlquilerBicicleta
+        else do
+
+        if (parqueoSalida == "En tránsito" || parqueoLlegada == "En tránsito") then do
+            UT.limpiarConsola
+            let msj = "No se puede alquilar una bicicleta en tránsito."
+            UT.mostrarMensaje "Error" msj "!!"
+            UT.pausarConsola
+            solicitarAlquilerBicicleta
+        else do
+
+        if (parqueoSalida == parqueoLlegada) then do
+            UT.limpiarConsola
+            let msj = "El parqueo de salida y el de llegada no pueden ser iguales."
+            UT.mostrarMensaje "Error" msj "!!"
+            UT.pausarConsola
+            solicitarAlquilerBicicleta
+        else do
+        
+        -- Todo en orden, muestra las bicicletas disponibles
+        UT.limpiarConsola
+        putStrLn "============ [BICICLETAS DISPONIBLES] ============"
+        Bicicleta.mostrarBicicletasDeParqueo parqueoSalida path_bicicletas
+        putStr "Ingrese el codigo de la bicicleta: "
+        codigoBici <- getLine
+        bExisteBici <- Bicicleta.bicicletaPerteneceAParqueo codigoBici parqueoSalida path_bicicletas
+        if (bExisteBici == True) then do
+            id_fac_generado <- obtenerIdFacturaNuevo
+            let nuevaFactura = Factura id_fac_generado cedula codigoBici parqueoSalida parqueoLlegada "En tránsito"
+            Factura.agregarFactura nuevaFactura
+            bic <- Bicicleta.obtenerBicicleta "B015" "./src/data/bicicletas.json"
+            Bicicleta.cambiarParqueo bic "En tránsito" "./src/data/bicicletas.json"
+            UT.limpiarConsola
+            let msj = "La bicicleta ha sido alquilada."
+            UT.mostrarMensaje "Resultado" msj "!!"
+            UT.pausarConsola
+            mostrarMenuGeneral
+        else do
+            UT.limpiarConsola
+            let msj = "El código de la bicicleta ingresada no existe."
+            UT.mostrarMensaje "Error" msj "!!"
+            UT.pausarConsola
+            solicitarAlquilerBicicleta
+        
+        else do
+            UT.limpiarConsola
+            let msj = "La cédula ingresada no existe."
+            UT.mostrarMensaje "Error" msj "!!"
+            UT.pausarConsola
+            solicitarAlquilerBicicleta
+    else do
+        existeArchivo <- UT.verificarArchivoExistente direccion
+        if (existeArchivo == True) then do
+            putStr "Ingrese la cedula del usuario: "
+            cedula <- getLine
+            bExisteCed <- Usuario.existeCedula cedula "./src/data/usuarios.json"
+            if (bExisteCed == True) then do
+            -- El usuario existe
+
+            putStr "Ingrese el parqueo de salida: "
+            parqueoSalida <- getLine
+            putStr "Ingrese el parqueo de llegada: "
+            parqueoLlegada <- getLine
+
+            bExisteParqSal <- Parqueo.existeParqueo "./src/data/parqueo.json" parqueoSalida
+            bExisteParqLleg <- Parqueo.existeParqueo "./src/data/parqueo.json" parqueoLlegada
+
+            if (bExisteParqSal == False || bExisteParqLleg == False) then do
+                UT.limpiarConsola
+                let msj = "Debe ingresar parqueos existentes."
+                UT.mostrarMensaje "Error" msj "!!"
+                UT.pausarConsola
+                solicitarAlquilerBicicleta
+            else do
+
+            if (parqueoSalida == "En tránsito" || parqueoLlegada == "En tránsito") then do
+                UT.limpiarConsola
+                let msj = "No se puede alquilar una bicicleta en tránsito."
+                UT.mostrarMensaje "Error" msj "!!"
+                UT.pausarConsola
+                solicitarAlquilerBicicleta
+            else do
+
+            if (parqueoSalida == parqueoLlegada) then do
+                UT.limpiarConsola
+                let msj = "El parqueo de salida y el de llegada no pueden ser iguales."
+                UT.mostrarMensaje "Error" msj "!!"
+                UT.pausarConsola
+                solicitarAlquilerBicicleta
+            else do
+            
+            -- Todo en orden, muestra las bicicletas disponibles
+            UT.limpiarConsola
+            putStrLn "============ [BICICLETAS DISPONIBLES] ============"
+            Bicicleta.mostrarBicicletasDeParqueo parqueoSalida path_bicicletas
+            putStr "Ingrese el codigo de la bicicleta: "
+            codigoBici <- getLine
+            bExisteBici <- Bicicleta.bicicletaPerteneceAParqueo codigoBici parqueoSalida path_bicicletas
+            if (bExisteBici == True) then do
+                id_fac_generado <- obtenerIdFacturaNuevo
+                let nuevaFactura = Factura id_fac_generado cedula codigoBici parqueoSalida parqueoLlegada "En tránsito"
+                Factura.agregarFactura nuevaFactura
+                bic <- Bicicleta.obtenerBicicleta codigoBici direccion
+                Bicicleta.cambiarParqueo bic "En tránsito" direccion
+                UT.limpiarConsola
+                let msj = "La bicicleta ha sido alquilada."
+                UT.mostrarMensaje "Resultado" msj "!!"
+                UT.pausarConsola
+                mostrarMenuGeneral
+            else do
+                UT.limpiarConsola
+                let msj = "El código de la bicicleta ingresada no existe."
+                UT.mostrarMensaje "Error" msj "!!"
+                UT.pausarConsola
+                solicitarAlquilerBicicleta
+            
+            else do
+                UT.limpiarConsola
+                let msj = "La cédula ingresada no existe."
+                UT.mostrarMensaje "Error" msj "!!"
+                UT.pausarConsola
+                solicitarAlquilerBicicleta
+        else do
+            UT.limpiarConsola
+            let msj = "El archivo no existe. Verifique la ruta ingresada."
+            UT.mostrarMensaje "Error" msj "!!"
+            UT.pausarConsola
+            solicitarAlquilerBicicleta
+
+mostrarMenuGeneral :: IO ()
+mostrarMenuGeneral = do
+    putStrLn "============ [MENU GENERAL] ============"
+    putStrLn "1. Consultar parqueo más cercano (por coordenadas)."
+    putStrLn "2. Alquilar bicicleta"
+    putStrLn "3. Facturar"
+    putStrLn "0. Volver al menú principal"
+    putStr "Digite la opcion deseada: \n>"
+    opcion <- getLine
+
+    if (UT.verificarEnteroValido opcion) then do
+        case (read opcion :: Int) of
+            1 -> do
+                UT.limpiarConsola
+                solicitarParqueoMasCercano
+            2 -> do
+                UT.limpiarConsola
+                solicitarAlquilerBicicleta
+            3 -> do
+                UT.limpiarConsola
+                mostrarMenuGestionBicicletas
+            0 -> do
+                UT.limpiarConsola
+                mostrarMenuPrincipal
             _ -> do
                 UT.limpiarConsola
                 let msj = "Debe digitar una opcion valida." ++
@@ -521,7 +802,9 @@ mostrarMenuPrincipal = do
             1 -> do
                 UT.limpiarConsola
                 mostrarMenuOperativo
-            2 -> putStrLn "...."
+            2 -> do
+                UT.limpiarConsola
+                mostrarMenuGeneral
             3 -> putStrLn "Saliendo..."
             _ -> do
                 UT.limpiarConsola
@@ -543,4 +826,5 @@ mostrarMenuPrincipal = do
 main :: IO ()
 main = do
     UT.limpiarConsola
+    
     mostrarMenuPrincipal
