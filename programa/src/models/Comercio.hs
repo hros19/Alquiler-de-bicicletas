@@ -59,4 +59,17 @@ mostrarComercio = do
     putStrLn ("Tarifa por kilómetro de pedal: " ++ show (tarifaColonesKmPedal comercio))
     putStrLn ("Tarifa por kilómetro de eléctrico: " ++ show (tarifaColonesKmElectrico comercio))
 
+mostrarComercioSinTarifas :: IO ()
+mostrarComercioSinTarifas = do
+    comercio <- obtenerComercio
+    putStrLn ("Nombre: " ++ nombre comercio)
+    putStrLn ("Web: " ++ web comercio)
+    putStrLn ("Contacto: " ++ contacto comercio)
 
+obtenerTarifaSegunTipo :: String -> IO Double
+obtenerTarifaSegunTipo tipo = do
+    comercio <- obtenerComercio
+    case tipo of
+        "TR" -> return (tarifaColonesKmPedal comercio)
+        "AE" -> return (tarifaColonesKmElectrico comercio)
+        _ -> return 0
