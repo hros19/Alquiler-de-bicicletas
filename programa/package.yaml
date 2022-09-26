@@ -26,6 +26,8 @@ dependencies:
 - bytestring
 - process
 - directory
+- tuple
+- random
 
 ghc-options:
 - -Wall
