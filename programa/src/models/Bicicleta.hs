@@ -100,7 +100,7 @@ mostrarBicicletaSinParqueo bicicleta
 mostrarBicicletaEnTransito :: Bicicleta -> String
 mostrarBicicletaEnTransito bicicleta = "Código: " ++ (Bicicleta.codigo bicicleta) ++ "\n" ++
                                        "Tipo: " ++ (Bicicleta.tipo bicicleta) ++ "\n" ++
-                                       "Parqueo: En Tránsito\n" ++
+                                       "Parqueo: " ++ (Bicicleta.parqueo bicicleta) ++ "\n" ++
                                        "--------------------------------------------\n"
 
 mostrarBicicletas :: String -> IO ()
