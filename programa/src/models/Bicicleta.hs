@@ -43,15 +43,18 @@ obtenerBicicletas path = do
         Nothing -> return []
         Just bicicletas -> return bicicletas
 
-obtenerBicicleta :: String -> String -> IO (Maybe Bicicleta)
+obtenerBicicleta :: String -> String -> IO Bicicleta
 obtenerBicicleta codigo path = do
     bicicletas <- obtenerBicicletas path
-    return (obtenerBicicleta' codigo bicicletas)
+    case bicicletas of
+        [] -> return (Bicicleta "" "" "")
+        _ -> return (obtenerBicicleta' codigo bicicletas)
 
-obtenerBicicleta' :: String -> [Bicicleta] -> Maybe Bicicleta
-obtenerBicicleta' codigo [] = Nothing
-obtenerBicicleta' codigo (x:xs)
-    | codigo == (Bicicleta.codigo x) = Just x
+
+obtenerBicicleta' :: String -> [Bicicleta] -> Bicicleta
+obtenerBicicleta' codigo [] = Bicicleta "" "" ""
+obtenerBicicleta' codigo (x:xs) 
+    | (codigo == (Bicicleta.codigo x)) = x
     | otherwise = obtenerBicicleta' codigo xs
 
 eliminarBicicleta :: String -> String -> IO ()
@@ -80,11 +83,19 @@ actualizarBicicleta' bicicleta (x:xs)
 
 mostrarBicicleta :: Bicicleta -> String
 mostrarBicicleta bicicleta 
-    | (Bicicleta.parqueo bicicleta) == "" = ""
+    | (Bicicleta.parqueo bicicleta) == "En tránsito" = ""
     | otherwise = "Código: " ++ (Bicicleta.codigo bicicleta) ++ "\n" ++
                   "Tipo: " ++ (Bicicleta.tipo bicicleta) ++ "\n" ++
                   "Parqueo: " ++ (Bicicleta.parqueo bicicleta) ++ "\n" ++
                   "--------------------------------------------\n"
+
+mostrarBicicletaSinParqueo :: Bicicleta -> String
+mostrarBicicletaSinParqueo bicicleta 
+    | (Bicicleta.parqueo bicicleta) == "En tránsito" = ""
+    | otherwise = "Código: " ++ (Bicicleta.codigo bicicleta) ++ "\n" ++
+                  "Tipo: " ++ (Bicicleta.tipo bicicleta) ++ "\n" ++
+                  "--------------------------------------------\n"
+
 
 mostrarBicicletaEnTransito :: Bicicleta -> String
 mostrarBicicletaEnTransito bicicleta = "Código: " ++ (Bicicleta.codigo bicicleta) ++ "\n" ++
@@ -109,8 +120,8 @@ mostrarBicicletasEnTransito path = do
 mostrarBicicletasEnTransito' :: [Bicicleta] -> String
 mostrarBicicletasEnTransito' [] = ""
 mostrarBicicletasEnTransito' (x:xs)
-    | (Bicicleta.parqueo x) == "" = (mostrarBicicletaEnTransito x) ++
-                                    (mostrarBicicletasEnTransito' xs)
+    | (Bicicleta.parqueo x) == "En tránsito" = (mostrarBicicletaEnTransito x) ++
+                                               (mostrarBicicletasEnTransito' xs)
     | otherwise = mostrarBicicletasEnTransito' xs
 
 mostrarBicicletasDeParqueo :: String -> String -> IO ()
@@ -121,7 +132,7 @@ mostrarBicicletasDeParqueo parqueo path = do
 mostrarBicicletasDeParqueo' :: String -> [Bicicleta] -> String
 mostrarBicicletasDeParqueo' parqueo [] = ""
 mostrarBicicletasDeParqueo' parqueo (x:xs)
-    | parqueo == (Bicicleta.parqueo x) = (mostrarBicicleta x) ++
+    | parqueo == (Bicicleta.parqueo x) = (mostrarBicicletaSinParqueo x) ++
                                          (mostrarBicicletasDeParqueo' parqueo xs)
     | otherwise = mostrarBicicletasDeParqueo' parqueo xs
 
@@ -136,3 +147,19 @@ mostrarBicicletasPorTipo' tipo (x:xs)
     | tipo == (Bicicleta.tipo x) = (mostrarBicicleta x) ++
                                    (mostrarBicicletasPorTipo' tipo xs)
     | otherwise = mostrarBicicletasPorTipo' tipo xs
+
+bicicletaPerteneceAParqueo :: String -> String -> String -> IO Bool
+bicicletaPerteneceAParqueo codigo parqueo path = do
+    bicicletas <- obtenerBicicletas path
+    return (bicicletaPerteneceAParqueo' codigo parqueo bicicletas)
+
+bicicletaPerteneceAParqueo' :: String -> String -> [Bicicleta] -> Bool
+bicicletaPerteneceAParqueo' codigo parqueo [] = False
+bicicletaPerteneceAParqueo' codigo parqueo (x:xs)
+    | (codigo == (Bicicleta.codigo x)) && (parqueo == (Bicicleta.parqueo x)) = True
+    | otherwise = bicicletaPerteneceAParqueo' codigo parqueo xs
+
+cambiarParqueo :: Bicicleta -> String -> String -> IO ()
+cambiarParqueo bicicleta parqueo path = do
+    let bicicleta' = Bicicleta (Bicicleta.codigo bicicleta) (Bicicleta.tipo bicicleta) parqueo
+    actualizarBicicleta bicicleta' path
