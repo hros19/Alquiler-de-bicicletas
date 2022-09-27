@@ -31,6 +31,7 @@ library
       Comercio
       Factura
       Parqueo
+      Recibo
       Usuario
   other-modules:
       Paths_programa
