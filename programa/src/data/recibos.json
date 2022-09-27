@@ -1,0 +1,13 @@
+[
+    {
+        "cedulaCliente": "123456789",
+        "codigoBici": "B011",
+        "costoTotal": 98883.24342042235,
+        "distanciaRecorridaEnKm": 140.16051512462417,
+        "idFactura": 85034,
+        "parqueoLlegada": "PARQ01",
+        "parqueoSalida": "PARQ03",
+        "tarifaPorKilometro": 705.5,
+        "tipoBici": "AE"
+    }
+]
