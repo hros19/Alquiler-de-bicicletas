@@ -38,10 +38,26 @@ data Comercio = Comercio {
 instance ToJSON Comercio
 instance FromJSON Comercio
 
+{-
+    Función: guardarComercio
+    Descripción: Guarda un comercio en el archivo de comercio.
+    Parámetros:
+        comercio: Comercio a guardar.
+    Retorno: --
+    Restricciones: --
+-}
 guardarComercio :: Comercio -> IO ()
 guardarComercio comercio = do
     BS.writeFile path_comercio (encodePretty comercio)
 
+{-
+    Función: obtenerComercio
+    Descripción: Obtiene el comercio del archivo de comercio.
+    Objetivo: Obtener el comercio del archivo de comercio, para mosttrar los datos del comercio.
+    Parámetros: --
+    Retorno: objeto Comercio.
+    Restricciones: --
+-}
 obtenerComercio :: IO Comercio
 obtenerComercio = do
     contenido <- BS.readFile path_comercio
@@ -50,6 +66,14 @@ obtenerComercio = do
         Just comercio -> return comercio
         Nothing -> return (Comercio "" "" "" 0 0)
 
+{-
+    Función: mostrarComercio
+    Descripción: muestra todos los datos del comercio.
+    Objetivo: mostrar todos los datos del comercio al usuario.
+    Parámetros: --
+    Retorno: --
+    Restricciones: --
+-}
 mostrarComercio :: IO ()
 mostrarComercio = do
     comercio <- obtenerComercio
@@ -59,6 +83,14 @@ mostrarComercio = do
     putStrLn ("Tarifa por kilómetro de pedal: " ++ show (tarifaColonesKmPedal comercio))
     putStrLn ("Tarifa por kilómetro de eléctrico: " ++ show (tarifaColonesKmElectrico comercio))
 
+{-
+    Función: mostrarComercioSinTarifas
+    Descripción: muestra todos los datos del comercio excepto las tarifas.
+    Objetivo: mostrar todos los datos del comercio al usuario excepto las tarifas (en facturas).
+    Parámetros: --
+    Retorno: --
+    Restricciones: --
+-}
 mostrarComercioSinTarifas :: IO ()
 mostrarComercioSinTarifas = do
     comercio <- obtenerComercio
@@ -66,6 +98,14 @@ mostrarComercioSinTarifas = do
     putStrLn ("Web: " ++ web comercio)
     putStrLn ("Contacto: " ++ contacto comercio)
 
+{-
+    Función: obtenerTarifaSegúnTipo
+    Descripción: permite obtener la tarifa según el tipo de bicicleta.
+    Parámetros:
+    - tipoBicicleta: Tipo de bicicleta.
+    Retorno: Tarifa según el tipo de bicicleta.
+    Restricciones: --
+-}
 obtenerTarifaSegunTipo :: String -> IO Double
 obtenerTarifaSegunTipo tipo = do
     comercio <- obtenerComercio

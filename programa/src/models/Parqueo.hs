@@ -36,7 +36,6 @@ data Parqueo = Parqueo {
 instance ToJSON Parqueo
 instance FromJSON Parqueo
 
-
 {-
     Nombre: obtenerParqueos
     Descripcion: funcion que obtiene la informacion de los parqueos de un archivo externo
@@ -164,15 +163,48 @@ mostrarParqueosPorProvincia' (x:xs) provincia =
         (mostrarParqueosPorProvincia' xs provincia) 
     else mostrarParqueosPorProvincia' xs provincia
 
+{-
+    Función: obtenerParqueo
+    Descripción: obtiene un parqueo apartir de su nombre y un path de un archivo
+    Objetivo: obtiene un parqueo apartir de su nombre y un path de un archivo
+    Parámetros:
+        - path: ubicación del archivo
+        - nombre: nombre del parqueo
+    Retorno:
+        - parqueo: parqueo con el nombre ingresado
+    Restricciones: --
+-}
 obtenerParqueo :: String -> String -> IO Parqueo
 obtenerParqueo path nombre = do
     parqueos <- obtenerParqueos path
     return (obtenerParqueo' parqueos nombre)
 
+{-
+    Función: obtenerParqueo'
+    Descripción: obtiene un parqueo apartir de su nombre y una lista de parqueos
+    Objetivo: obtiene un parqueo apartir de su nombre y una lista de parqueos
+    Parámetros:
+        - parqueos: lista de parqueos
+        - nombre: nombre del parqueo
+    Retorno:
+        - parqueo: parqueo con el nombre ingresado
+    Restricciones: --
+-}
 obtenerParqueo' :: [Parqueo] -> String -> Parqueo
 obtenerParqueo' [] nombre = Parqueo "" "" "" 0 0
 obtenerParqueo' (x:xs) nombre = 
     if (Parqueo.nombre x) == nombre then x else obtenerParqueo' xs nombre
 
+{-
+    Función: distanciaEntreDosParqueos
+    Descripción: obtiene la distancia entre dos parqueos
+    Objetivo: obtiene la distancia entre dos parqueos
+    Parámetros:
+        - parqueo1: parqueo 1 (objeto)
+        - parqueo2: parqueo 2 (objeto)
+    Retorno:
+        - distancia: distancia entre los dos parqueos
+    Restricciones: --
+-}
 distanciaEntreDosParqueos :: Parqueo -> Parqueo -> Double
 distanciaEntreDosParqueos parqueo1 parqueo2 = sqrt(((Parqueo.x parqueo1 - Parqueo.x parqueo2)^2) + ((Parqueo.y parqueo1 - Parqueo.y parqueo2)^2))

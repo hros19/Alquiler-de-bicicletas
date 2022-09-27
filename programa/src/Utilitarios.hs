@@ -74,11 +74,29 @@ verificarNumeroPositivo strNumero
     | (read strNumero :: Double) < 0 = False
     | otherwise = True
 
+{-
+    Función: verificarArchivoExistente
+    Descripción: Verifica si un archivo existe.
+    Objetivo: Evitar que el programa se caiga si se ingresa un archivo que no existe.
+    Parámetros:
+        - String: El nombre del archivo a verificar.
+    Retorno: True si el archivo existe, False en caso contrario.
+    Restricciones: --
+-}
 verificarArchivoExistente :: String -> IO Bool
 verificarArchivoExistente ruta = do
     existe <- (doesFileExist ruta)
     return (existe :: Bool)
 
+{-
+    Función: strPerteneceALista
+    Descripción: Valida si un String pertenece a una lista de Strings.
+    Parámetros:
+        - String: El String a verificar.
+        - [String]: La lista de Strings a verificar.
+    Retorno:
+        - Bool: True si el String pertenece a la lista, False en caso contrario.
+-}
 strPerteneceALista :: String -> [String] -> Bool
 strPerteneceALista str lista = do
     if (length lista) == 0 then
@@ -120,6 +138,13 @@ pausarConsola = do
     limpiarConsola
     return ()
 
+{-
+    Función: generarIdFactura
+    Descripción: Genera un ID de factura aleatorio.
+    Parámetros: --
+    Retorno:
+        - Int: ID de factura aleatorio.
+-}
 generarIdFactura :: IO Int
 generarIdFactura = do
     idFactura <- randomRIO (1, 1000000)
