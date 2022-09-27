@@ -22,8 +22,17 @@ import Bicicleta
 import Parqueo
 import Usuario
 import Factura
+import Recibo
 import qualified Utilitarios as UT
 
+{-
+    Función: editarDatosComercio
+    Descripción: Función que permite editar los datos del comercio.
+    Objetivo: Permitir al usuario editar datos básicos del comercio.
+    Parámetros: --
+    Retorno: --
+    Restricciones: --
+-}
 editarDatosComercio :: IO ()
 editarDatosComercio = do
     UT.limpiarConsola
@@ -109,6 +118,14 @@ editarDatosComercio = do
         Comercio.guardarComercio comercio
         return ()
 
+{-
+    Función: mostrarMenuGestionComercio
+    Descripción: muestra el menú de gestión del comercio.
+    Objetivo: mostrar el usuario las opciones disponibles para gestionar el comercio.
+    Parámetros: --
+    Retorno: --
+    Restricciones: --
+-}
 mostrarMenuGestionComercio :: IO ()
 mostrarMenuGestionComercio = do
     putStrLn "================== [GESTION DEL COMERCIO] =================="
@@ -146,6 +163,15 @@ mostrarMenuGestionComercio = do
         UT.pausarConsola
         mostrarMenuGestionComercio
 
+{-
+    Función: mostrarTodosLosParqueos
+    Descripción: muestra todos los parqueos registrados en el sistema.
+    Objetivo: el objetivo es pedirle al usuario el path del archivo con todos los
+              parqueos registrados en el sistema y mostrarlos en pantalla.
+    Parámetros: --
+    Retorno: --
+    Restricciones: --
+-}
 mostrarTodosLosParqueos :: IO ()
 mostrarTodosLosParqueos = do
     UT.limpiarConsola
@@ -172,6 +198,15 @@ mostrarTodosLosParqueos = do
         UT.pausarConsola
         mostrarTodosLosParqueos
 
+{-
+    Función: solicitarParqueosPorProvincia
+    Descripción: muestra todos los parqueos registrados en el sistema de una provincia.
+    Objetivo: el objetivo es pedirle al usuario el path del archivo, la provincia y
+              mostrar los parqueos de la provincia en pantalla.
+    Parámetros: --
+    Retorno: --
+    Restricciones: --
+-}
 solicitarParqueosPorProvincia :: IO ()
 solicitarParqueosPorProvincia = do
     UT.limpiarConsola
@@ -235,6 +270,15 @@ solicitarParqueosPorProvincia = do
         UT.pausarConsola
         solicitarParqueosPorProvincia
 
+{-
+    Función: solicitarBicisDeParqueo
+    Descripción: solicita todas las bicicletas de un parqueo.
+    Objetivo: el objetivo es pedirle al usuario el path del archivo de bicicletas,
+              el nombre del parqueo y mostrar las bicicletas del parqueo en pantalla.
+    Parámetros: --
+    Retorno: --
+    Restricciones: --
+-}
 solicitarBicisDeParqueo :: IO ()
 solicitarBicisDeParqueo = do
     putStrLn "============ [BICICLETAS DE UN PARQUEO] ============"
@@ -304,6 +348,14 @@ solicitarBicisDeParqueo = do
         UT.pausarConsola
         solicitarBicisDeParqueo
 
+{-
+    Función: mostrarMenuGestionParqueos
+    Descripción: muestra el menú de gestión de parqueos.
+    Objetivo: pedir al usuario que seleccione una opción del menú para gestionar parqueos.
+    Parámetros: --
+    Retorno: --
+    Restricciones: --
+-}
 mostrarMenuGestionParqueos :: IO ()
 mostrarMenuGestionParqueos = do
     putStrLn "================== [GESTION DE LOS PARQUEOS] =================="
@@ -335,6 +387,15 @@ mostrarMenuGestionParqueos = do
         UT.pausarConsola
         mostrarMenuGestionParqueos
 
+{-
+    Función: solicitarTodasLasBicicletas
+    Descripción: solicita todas las bicicletas del sistema para mostrarlas.
+    Objetivo: el objetivo es pedirle una ubicación al usuario del archivo de bicicletas
+              y mostrar todas las bicicletas en pantalla.
+    Parámetros: --
+    Retorno: --
+    Restricciones: --
+-}
 solicitarTodasLasBicicletas :: IO ()
 solicitarTodasLasBicicletas = do
     putStrLn "============ [TODAS LAS BICICLETAS] ============"
@@ -361,6 +422,15 @@ solicitarTodasLasBicicletas = do
             UT.pausarConsola
             solicitarTodasLasBicicletas
 
+{-
+    Función: solicitarBicisDeParqueo
+    Descripción: solicita todas las bicicletas de un parqueo.
+    Objetivo: el objetivo es pedirle al usuario el path del archivo de bicicletas,
+              el nombre del parqueo y mostrar las bicicletas del parqueo en pantalla.
+    Parámetros: --
+    Retorno: --
+    Restricciones: --
+-}
 solicitarBicicletasPorTipo :: IO ()
 solicitarBicicletasPorTipo = do
     putStrLn "============ [BICICLETAS POR TIPO] ============"
@@ -407,6 +477,14 @@ solicitarBicicletasPorTipo = do
             UT.pausarConsola
             solicitarBicicletasPorTipo
 
+{-
+    Función: mostrarMenuGestionBicicletas
+    Descripción: muestra un menú para la gestión de bicicletas.
+    Objetivo: pide una opción al usuario para que pueda gestionar las bicicletas.
+    Parámetros: --
+    Retorno: --
+    Restricciones: --
+-}
 mostrarMenuGestionBicicletas :: IO ()
 mostrarMenuGestionBicicletas = do
     putStrLn "================== [GESTION DE BICICLETAS] =================="
@@ -440,6 +518,15 @@ mostrarMenuGestionBicicletas = do
         UT.pausarConsola
         mostrarMenuGestionBicicletas
 
+{-
+    Función: mostrarUsuariosRegistrados
+    Descripción: muestra todos los usuarios registrados en un archivo.
+    Objetivo: el objetivo es pedirle al usuario el path del archivo de usuarios y
+              mostrar los usuarios registrados en pantalla.
+    Parámetros: --
+    Retorno: --
+    Restricciones: --
+-}
 mostrarUsuariosRegistrados :: IO ()
 mostrarUsuariosRegistrados = do
     putStrLn "============ [USUARIOS REGISTRADOS] ============"
@@ -466,6 +553,72 @@ mostrarUsuariosRegistrados = do
             UT.pausarConsola
             mostrarUsuariosRegistrados
 
+{-
+    Función: mostrarMenuEstadisticas
+    Descripción: muestra el menu de las estadisticas.
+    Objetivo: ofreceler un menu de opciones al usuario para que pueda visualizar
+              las estadisticas.
+    Parámetros: --
+    Retorno: --
+    Restricciones: --
+-}
+mostrarMenuEstadisticas :: IO ()
+mostrarMenuEstadisticas = do
+    putStrLn "================== [ESTADISTICAS] =================="
+    putStrLn "1. Top 5 usuarios con más viajes."
+    putStrLn "2. Top 5 parqueos con más viajes."
+    putStrLn "3. Top 3 bicicletas con más kilometros recorridos."
+    putStrLn "4. Resumen"
+    putStrLn "0. Volver al menú principal."
+    putStr "Digite la opción deseada: \n>"
+    opcion <- getLine
+
+    if (UT.verificarEnteroValido opcion) then do
+        case (read opcion :: Int) of
+            1 -> do
+                UT.limpiarConsola
+                Factura.mostrarTopCincoUsuariosConMasViajes
+                UT.pausarConsola
+                mostrarMenuEstadisticas
+            2 -> do
+                UT.limpiarConsola
+                Factura.mostrarTopCincoParqueosConMasViajes
+                UT.pausarConsola
+                mostrarMenuEstadisticas
+            3 -> do
+                UT.limpiarConsola
+                Factura.mostrarTopTresBicisConMasDistancia
+                UT.pausarConsola
+                mostrarMenuEstadisticas
+            4 -> do
+                UT.limpiarConsola
+                Factura.mostrarResumen
+                UT.pausarConsola
+                mostrarMenuEstadisticas
+            0 -> do
+                UT.limpiarConsola
+                mostrarMenuPrincipal
+            _ -> do
+                UT.limpiarConsola
+                let msj = "Debe digitar una opción válida."
+                UT.mostrarMensaje "Error" msj "!!"
+                UT.pausarConsola
+                mostrarMenuEstadisticas
+    else do
+        UT.limpiarConsola
+        let msj = "Debe digitar una opción válida."
+        UT.mostrarMensaje "Error" msj "!!"
+        UT.pausarConsola
+        mostrarMenuEstadisticas
+
+{-
+    Función: mostrarMenuOperativo
+    Descripción: muestra el menu de opciones operativas.
+    Objetivo: que el usuario pueda seleccionar una opcion para navegar entre las opciones operativas.
+    Parámetros: --
+    Retorno: --
+    Restricciones: --
+-}
 mostrarMenuOperativo :: IO ()
 mostrarMenuOperativo = do
     putStrLn "============ [MENU OPERATIVO] ============"
@@ -473,7 +626,7 @@ mostrarMenuOperativo = do
     putStrLn "2. Gestión de los parqueos"
     putStrLn "3. Gestión de las bicicletas"
     putStrLn "4. Mostrar usuarios registrados"
-    putStrLn "5. Estadísticas... (pendiente)"
+    putStrLn "5. Estadísticas"
     putStrLn "0. Volver al menú principal"
     putStr "Digite la opcion deseada: \n>"
     opcion <- getLine
@@ -492,6 +645,9 @@ mostrarMenuOperativo = do
             4 -> do
                 UT.limpiarConsola
                 mostrarUsuariosRegistrados
+            5 -> do
+                UT.limpiarConsola
+                mostrarMenuEstadisticas
             0 -> do
                 UT.limpiarConsola
                 mostrarMenuPrincipal
@@ -512,6 +668,14 @@ mostrarMenuOperativo = do
         UT.pausarConsola
         mostrarMenuPrincipal
 
+{-
+    Función: solicitarParqueoMasCercano
+    Descripción: solicita el parqueo que se encuentre más cercano.
+    Objetivo: pedir al usuario un punto (x,y) para luego mostrarle el parqueo más cercano.
+    Parámetros: --
+    Retorno: --
+    Restricciones: --
+-}
 solicitarParqueoMasCercano :: IO ()
 solicitarParqueoMasCercano = do
     putStrLn "============ [PARQUEO MAS CERCANO] ============"
@@ -584,6 +748,14 @@ solicitarParqueoMasCercano = do
             UT.pausarConsola
             solicitarParqueoMasCercano
 
+{-
+    Función: obtenerIdFacturaNuevo
+    Descripción: permite obtener un nuevo int aleatorio.
+    Objetivo: poder generar identificadores de las facturas de forma pseudoaleatoria.
+    Parámetros: --
+    Retorno: Int -> identificador de la factura (pseudoaleatorio).
+    Restricciones: --
+-}
 obtenerIdFacturaNuevo :: IO Int
 obtenerIdFacturaNuevo = do
     nuevoId <- UT.generarIdFactura
@@ -593,6 +765,15 @@ obtenerIdFacturaNuevo = do
     else do
         return nuevoId
 
+{-
+    Función: solicitarAlquilerBicicleta
+    Descripción: solicita un nuevo alquiler de bicicletas.
+    Objetivo: permite al usuario alquilar una bicicleta que se encuentre desocupada (no "En tránsito"), a un
+              usuario a partir de su cédula, y parqueos para definir el punto de inicio y fin del alquiler.
+    Parámetros: --
+    Retorno: --
+    Restricciones: --
+-}
 solicitarAlquilerBicicleta :: IO ()
 solicitarAlquilerBicicleta = do
     putStrLn "============ [ALQUILER DE BICICLETA] ============"
@@ -747,6 +928,14 @@ solicitarAlquilerBicicleta = do
             UT.pausarConsola
             solicitarAlquilerBicicleta
 
+{-
+    Función: realizarFacturacion
+    Descripción: pemmite realizar la cancelación de una factura activa.
+    Objetivo: pide la usuario una factura, muestra el detalle del recibo y lo almacena.
+    Parámetros: --
+    Retorno: --
+    Restricciones: --
+-}
 realizarFacturacion :: IO ()
 realizarFacturacion = do
     putStrLn "============ [REALIZAR FACTURACION] ============"
@@ -774,6 +963,8 @@ realizarFacturacion = do
             usuarioFac <- Usuario.obtenerUsuario "./src/data/usuarios.json" (Factura.cedulaCliente factura)
             putStr (Usuario.mostrarUsuario usuarioFac)
             bicicletaFac <- Bicicleta.obtenerBicicleta (Factura.codigoBici factura) "./src/data/bicicletas.json"
+            let nuevaBici = Bicicleta (Bicicleta.codigo bicicletaFac) (Bicicleta.tipo bicicletaFac) (Factura.parqueoLlegada factura)
+            Bicicleta.actualizarBicicleta nuevaBici "./src/data/bicicletas.json"
             putStrLn "(TR) Tradicional | (AE) Asistencia eléctrica"
             putStr (Bicicleta.mostrarBicicletaEnTransito bicicletaFac)
             parqueoSal <- Parqueo.obtenerParqueo "./src/data/parqueo.json" (Factura.parqueoSalida factura)
@@ -789,6 +980,8 @@ realizarFacturacion = do
             putStrLn "==============================================================="
             let facturaActualizada = Factura (Factura.idFactura factura) (Factura.cedulaCliente factura) (Factura.parqueoSalida factura) (Factura.parqueoLlegada factura) (Factura.codigoBici factura) "facturado"
             Factura.actualizarFactura facturaActualizada
+            let recibo = Recibo (Factura.idFactura factura) (Factura.cedulaCliente factura)  (Factura.parqueoSalida factura) (Factura.parqueoLlegada factura) (Factura.codigoBici factura) (Bicicleta.tipo bicicletaFac) tarifa distanciaRecorrida costoTotal
+            Recibo.agregarRecibo recibo
             UT.pausarConsola
             mostrarMenuGeneral
         else do
@@ -803,7 +996,15 @@ realizarFacturacion = do
         UT.mostrarMensaje "Error" msj "!!"
         UT.pausarConsola
         realizarFacturacion
-    
+
+{-
+    Función: mostrarMenuGeneral
+    Descripción: muestra el menu de opciones generales.
+    Objetivo: enseñarle al usuario todas las opciones generales y navegar a través de sus opciones
+    Parámetros: --
+    Retorno: --
+    Restricciones: --
+-}
 mostrarMenuGeneral :: IO ()
 mostrarMenuGeneral = do
     putStrLn "============ [MENU GENERAL] ============"
@@ -845,6 +1046,14 @@ mostrarMenuGeneral = do
         UT.pausarConsola
         mostrarMenuPrincipal
 
+{-
+    Función: mostrarMenuPrincipal
+    Descripción: muestra el menú de opciones principales.
+    Objetivo: enseñarle al usuario todas las opciones principales y navegar a través de sus opciones
+    Parámetros: --
+    Retorno: --
+    Restricciones: --
+-}
 mostrarMenuPrincipal :: IO ()
 mostrarMenuPrincipal = do
     putStrLn "============ [MENU PRINCIPAL] ============"
@@ -862,7 +1071,7 @@ mostrarMenuPrincipal = do
             2 -> do
                 UT.limpiarConsola
                 mostrarMenuGeneral
-            3 -> putStrLn "Saliendo..."
+            0 -> putStrLn "Saliendo..."
             _ -> do
                 UT.limpiarConsola
                 let msj = "Debe digitar una opcion valida." ++
@@ -880,8 +1089,8 @@ mostrarMenuPrincipal = do
         UT.pausarConsola
         mostrarMenuPrincipal
 
+-- Punto de arranque de la aplicación
 main :: IO ()
 main = do
     UT.limpiarConsola
-    
     mostrarMenuPrincipal
