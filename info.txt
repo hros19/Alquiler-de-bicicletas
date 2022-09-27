@@ -1,0 +1,12 @@
+Lenguajes de Programación
+II Semestre, Año 2022
+
+Nombre y carné de estudiantes: 
+Hansol Antay 2020319635
+Alex Sánchez 2018014778
+
+Número de proyecto: 02 - Alquiler de bicicletas (Haskell).
+
+Fecha de entrega: 27 Agosto del 2022.
+
+Estatus de la entrega: Superior.
