@@ -6,5 +6,21 @@
         "idFactura": 197831,
         "parqueoLlegada": "PARQ02",
         "parqueoSalida": "PARQ01"
+    },
+    {
+        "cedulaCliente": "987654321",
+        "codigoBici": "B001",
+        "estado": "facturado",
+        "idFactura": 595910,
+        "parqueoLlegada": "PARQ02",
+        "parqueoSalida": "PARQ01"
+    },
+    {
+        "cedulaCliente": "987654321",
+        "codigoBici": "B009",
+        "estado": "facturado",
+        "idFactura": 251392,
+        "parqueoLlegada": "PARQ03",
+        "parqueoSalida": "PARQ02"
     }
 ]
