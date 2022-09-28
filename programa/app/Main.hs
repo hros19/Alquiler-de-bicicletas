@@ -569,7 +569,7 @@ mostrarMenuEstadisticas = do
     putStrLn "2. Top 5 parqueos con más viajes."
     putStrLn "3. Top 3 bicicletas con más kilometros recorridos."
     putStrLn "4. Resumen"
-    putStrLn "0. Volver al menú principal."
+    putStrLn "0. Volver al menú opciones operativas."
     putStr "Digite la opción deseada: \n>"
     opcion <- getLine
 
@@ -592,12 +592,13 @@ mostrarMenuEstadisticas = do
                 mostrarMenuEstadisticas
             4 -> do
                 UT.limpiarConsola
+                putStrLn "Resumen general:"
                 Factura.mostrarResumen
                 UT.pausarConsola
                 mostrarMenuEstadisticas
             0 -> do
                 UT.limpiarConsola
-                mostrarMenuPrincipal
+                mostrarMenuOperativo
             _ -> do
                 UT.limpiarConsola
                 let msj = "Debe digitar una opción válida."
@@ -832,7 +833,7 @@ solicitarAlquilerBicicleta = do
             bic <- Bicicleta.obtenerBicicleta codigoBici "./src/data/bicicletas.json"
             Bicicleta.cambiarParqueo bic "En tránsito" "./src/data/bicicletas.json"
             UT.limpiarConsola
-            let msj = "La bicicleta ha sido alquilada."
+            let msj = "La bicicleta ha sido alquilada. Factura: " ++ show id_fac_generado
             UT.mostrarMensaje "Resultado" msj "!!"
             UT.pausarConsola
             mostrarMenuGeneral
