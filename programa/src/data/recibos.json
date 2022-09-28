@@ -9,5 +9,27 @@
         "parqueoSalida": "PARQ03",
         "tarifaPorKilometro": 705.5,
         "tipoBici": "AE"
+    },
+    {
+        "cedulaCliente": "987654321",
+        "codigoBici": "B001",
+        "costoTotal": 38099.02885901424,
+        "distanciaRecorridaEnKm": 95.24757214753559,
+        "idFactura": 595910,
+        "parqueoLlegada": "PARQ02",
+        "parqueoSalida": "PARQ01",
+        "tarifaPorKilometro": 400,
+        "tipoBici": "TR"
+    },
+    {
+        "cedulaCliente": "987654321",
+        "codigoBici": "B009",
+        "costoTotal": 165040.03536024978,
+        "distanciaRecorridaEnKm": 233.9334307019841,
+        "idFactura": 251392,
+        "parqueoLlegada": "PARQ03",
+        "parqueoSalida": "PARQ02",
+        "tarifaPorKilometro": 705.5,
+        "tipoBici": "AE"
     }
 ]

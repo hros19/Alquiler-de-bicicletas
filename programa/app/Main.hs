@@ -1059,7 +1059,7 @@ mostrarMenuPrincipal = do
     putStrLn "============ [MENU PRINCIPAL] ============"
     putStrLn "1. Opciones operativas"
     putStrLn "2. Opciones generales"
-    putStrLn "0. Sair"
+    putStrLn "0. Salir"
     putStr "Digite la opcion deseada: \n>"
     opcion <- getLine
 

@@ -1,7 +1,7 @@
 [
     {
         "codigo": "B001",
-        "parqueo": "PARQ01",
+        "parqueo": "PARQ02",
         "tipo": "TR"
     },
     {
@@ -41,7 +41,7 @@
     },
     {
         "codigo": "B009",
-        "parqueo": "PARQ02",
+        "parqueo": "PARQ03",
         "tipo": "AE"
     },
     {
